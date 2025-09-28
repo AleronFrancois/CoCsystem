@@ -6,3 +6,6 @@ This system is collaboratively developed by ICT students from the **University o
 - **Aleron Francois**
 - **Bronson Billing**
 - **Leroy Bellchambers**
+
+
+Notes: Make sure to install vlucas/php.env

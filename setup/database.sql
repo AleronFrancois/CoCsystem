@@ -3,7 +3,7 @@ CREATE TABLE `User` (
   `role` ENUM('supervisor', 'investigator') NOT NULL,
   `username` VARCHAR(50) NOT NULL,
   `password` VARCHAR(60) NOT NULL
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `Case` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -13,7 +13,7 @@ CREATE TABLE `Case` (
   `description` VARCHAR(1024),
   `creator_id` INT NOT NULL,
   FOREIGN KEY (`creator_id`) REFERENCES `User`(`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `Evidence` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -23,7 +23,7 @@ CREATE TABLE `Evidence` (
   `locked` BOOLEAN NOT NULL DEFAULT FALSE,
   `uploader_id` INT NOT NULL,
   FOREIGN KEY (`uploader_id`) REFERENCES `User`(`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `EvidenceCustodyAction` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -36,7 +36,7 @@ CREATE TABLE `EvidenceCustodyAction` (
   `evidence_id` INT NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `User`(`id`),
   FOREIGN KEY (`evidence_id`) REFERENCES `Evidence`(`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `Metadata` (
   `evidence_id` INT NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE `Metadata` (
   `value` VARCHAR(1024) NOT NULL,
   PRIMARY KEY (`evidence_id`, `key`),
   FOREIGN KEY (`evidence_id`) REFERENCES `Evidence`(`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `CaseCustodyAction` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -55,7 +55,7 @@ CREATE TABLE `CaseCustodyAction` (
   `case_id` INT NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `User`(`id`),
   FOREIGN KEY (`case_id`) REFERENCES `Case`(`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `Case_User` (
   `case_id` INT NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE `Case_User` (
   PRIMARY KEY (`case_id`, `user_id`),
   FOREIGN KEY (`case_id`) REFERENCES `Case`(`id`),
   FOREIGN KEY (`user_id`) REFERENCES `User`(`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `Comment` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -75,7 +75,7 @@ CREATE TABLE `Comment` (
   FOREIGN KEY (`commenter_id`) REFERENCES `User`(`id`),
   FOREIGN KEY (`case_id`) REFERENCES `Case`(`id`),
   FOREIGN KEY (`evidence_id`) REFERENCES `Evidence`(`id`)
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE `Case_Evidence` (
   `case_id` INT NOT NULL,
@@ -83,5 +83,4 @@ CREATE TABLE `Case_Evidence` (
   PRIMARY KEY (`case_id`, `evidence_id`),
   FOREIGN KEY (`case_id`) REFERENCES `Case`(`id`),
   FOREIGN KEY (`evidence_id`) REFERENCES `Evidence`(`id`)
-);
-
+) ENGINE=InnoDB;

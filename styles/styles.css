@@ -1,0 +1,23 @@
+:root {
+    --background-colour: #F0EEEE;
+    --foreground-colour: #FAFAFA;
+    --selection-colour: #A8E8FF;
+    --unselected-colour: #8DC1D4;
+    --accent-colour: #9FB6F0;
+}
+
+.background {
+    background-color: var(--background-colour);
+}
+.foreground {
+    background-color: var(--foreground-colour);
+}
+.selection {
+    background-color: var(--selection-colour);
+}
+.unselected {
+    background-color: var(--unselected-colour);
+}
+.accent {
+    background-color: var(--accent-colour);
+}
