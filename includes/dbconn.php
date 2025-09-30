@@ -1,10 +1,10 @@
 <?php
-
-require __DIR__ . 'vendor/autoload.php';
+//phpinfo();
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 $dbHost = $_ENV['DB_HOST']; # The hostname of the database server
@@ -14,8 +14,12 @@ $dbPassword = $_ENV['DB_PASSWORD']; # The password used to connect to the databa
 $conn; # The database connection
 
 try {
-    $conn = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUsername, $dbPassword);
-} catch (PDOException) {
+    $conn = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPassword, [
+        PDO::MYSQL_ATTR_SSL_CA => "DigiCertGlobalRootG2.crt.pem"
+    ]);
+    //    $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
+    echo "<script>console.log('Success');</script>";
+} catch (PDOException $e) {
     echo $e->getMessage();
 }
 
