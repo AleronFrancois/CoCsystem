@@ -18,6 +18,12 @@
         -->
         <script defer>
             document.addEventListener("DOMContentLoaded", () => {
+                // Profile icon loads profile page
+                const profileButton = document.getElementById("profileButton");
+                profileButton.addEventListener("click", () => {
+                    window.location.href = "profile.php";
+                });
+
                 // Gets the reference to the necessary elements 
                 const createButton = document.getElementById("createCaseButton");
                 const caseNameInput = document.getElementById("caseName");
@@ -97,7 +103,7 @@
                         <a class="nav-link">Info</a>
                     </li>
                 </ul>
-                <img src="images/account_icon.svg">
+                <img src="images/account_icon.svg" role="button" id="profileButton">
             </div>
         </nav>
         
