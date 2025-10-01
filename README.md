@@ -21,5 +21,7 @@ git clone https://github.com/AleronFrancois/CoCsystem.git
 ```
 
 **Setup Database**
+
 Use this sql script to setup the necessary tables inside the database.
+
 [Database setup script](https://github.com/AleronFrancois/CoCsystem/blob/main/setup/database.sql)
