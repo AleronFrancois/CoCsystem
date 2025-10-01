@@ -15,12 +15,13 @@ $conn; # The database connection
 
 try {
     $conn = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPassword, [
-        PDO::MYSQL_ATTR_SSL_CA => "DigiCertGlobalRootG2.crt.pem"
+        PDO::MYSQL_ATTR_SSL_CA => __DIR__ . "/DigiCertGlobalRootG2.crt.pem"
     ]);
     //    $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
     echo "<script>console.log('Success');</script>";
 } catch (PDOException $e) {
     echo $e->getMessage();
+    echo "<script>console.log('Error');</script>";
 }
 
 ?>
