@@ -21,11 +21,6 @@ This system is collaboratively developed by ICT students from the **University o
 git clone https://github.com/AleronFrancois/CoCsystem.git
 ```
 
-**2. Setup database**
-
-Use this sql script to setup the necessary tables inside the database: 
-[Database setup script](https://github.com/AleronFrancois/CoCsystem/blob/main/setup/database.sql)
-
 **3. Install and setup dependancies**
 
 **For Windows**
@@ -34,3 +29,7 @@ Use this sql script to setup the necessary tables inside the database:
   
 2. Ensure that this line: **extension=pdo_mysql** is not commented-out in the **"C:\Program Files\php\php.ini"** file.
 
+**2. Setup database**
+
+Use this sql script to setup the necessary tables inside the database: 
+[Database setup script](https://github.com/AleronFrancois/CoCsystem/blob/main/setup/database.sql)
