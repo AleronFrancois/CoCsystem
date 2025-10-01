@@ -23,16 +23,16 @@ git clone https://github.com/AleronFrancois/CoCsystem.git
 
 **2. Install and setup dependancies**
   
-1. You can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
+- You can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
   
-2. Ensure that this line: **extension=pdo_mysql** is not commented-out in the **"C:\Program Files\php\php.ini"** file.
+- Ensure that this line: **extension=pdo_mysql** is not commented-out in the **"C:\Program Files\php\php.ini"** file.
 
-3. To enable **.env** file, inside the project directory run:
+- To enable **.env** file, inside the project directory run:
    ```bash
    composer require vlucas/phpdotenv
    ```
 
-5. Create the **.env** in the **CoCsystem** directory and add the database credentials.
+- Create the **.env** in the **CoCsystem** directory and add the database credentials.
 
 **3. Setup database**
 
