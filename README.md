@@ -27,6 +27,7 @@ Use this sql script to setup the necessary tables inside the database:
 [Database setup script](https://github.com/AleronFrancois/CoCsystem/blob/main/setup/database.sql)
 
 **3. Install and setup dependancies**
+
   **For Windows**
   
   **1.** On windows you can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
