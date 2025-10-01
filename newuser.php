@@ -16,18 +16,18 @@ if ($role !== 'supervisor') {
     exit;
 }
     
-if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $username = trim($_POST['newUsername'])
-    $password = $_POST['newPassword']
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['newUsername']);
+    $password = $_POST['newPassword'];
     
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT)
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     $stmt = $conn->prepare("INSERT INTO User (username,password,role) VALUES (?,?,'investigator')");
     if($stmt->execute([$username,$hashedPassword])){
-        echo "User Added succesfully"
+        echo "User Added succesfully";
     }
     else{
-        echo "User not added"
+        echo "User not added";
     }
 }
 */

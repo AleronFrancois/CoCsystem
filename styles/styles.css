@@ -21,3 +21,17 @@
 .accent {
     background-color: var(--accent-colour);
 }
+
+.list-group-item {
+    cursor: pointer;
+}
+
+.navbar-nav {
+    margin: 0 auto;
+    display: flex;       
+}
+
+.navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+}
