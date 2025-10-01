@@ -117,7 +117,7 @@ document.getElementById('addForm').addEventListener('submit', function(e) {
     <tr>
         <td><?php echo htmlspecialchars($inv['username']); ?></td>
         <td>
-            <form method="POST" style="display:inline;" onsubmit="return confirm('Remove <?php echo addslashes($inv['username']); ?> from this case?');">
+            <form method="POST" onsubmit="return confirm('Remove <?php echo ($inv['username']); ?> from this case?');">
                 <input type="hidden" name="remove_user_id" value="<?php echo $inv['id']; ?>">
                 <button type="submit">Remove Investigator</button>
             </form>
