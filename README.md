@@ -15,7 +15,6 @@ This system is collaboratively developed by ICT students from the **University o
 - **php-mysqlnd**
 
 ## Installation Guide
-For enterprise deployment, all dependancies must be installed on the server.
 
 **1. Clone Repository**
 ```bash
@@ -26,3 +25,7 @@ git clone https://github.com/AleronFrancois/CoCsystem.git
 
 Use this sql script to setup the necessary tables inside the database: 
 [Database setup script](https://github.com/AleronFrancois/CoCsystem/blob/main/setup/database.sql)
+
+**3. Install Required Dependancies**
+
+For the .env file to work, ensure vlucus/php.env and php-mysqlnd is installed.
