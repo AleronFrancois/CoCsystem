@@ -28,12 +28,9 @@ Use this sql script to setup the necessary tables inside the database:
 
 **3. Install and setup dependancies**
 
-  **For Windows**
+**For Windows**
   
-  **1.** On windows you can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
+1. On windows you can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
   
-  **NOTE:** Ensure that this line: **extension=pdo_mysql** is not commented-out in the "C:\Program Files\php\php.ini" file.
+NOTE: Ensure that this line: **extension=pdo_mysql** is not commented-out in the "C:\Program Files\php\php.ini" file.
 
-  - **For Linux**
-    
-For the .env file to work, ensure vlucus/php.env and php-mysqlnd is installed.
