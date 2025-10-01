@@ -11,6 +11,7 @@ This system is collaboratively developed by ICT students from the **University o
 - **PHP**
 - **SQL Relational Database**
 - **Web Server**
+- **vlucas/php.env**
 
 ## Installation Guide
 For enterprise deployment, all dependancies must be installed on the server.
