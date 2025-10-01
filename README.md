@@ -23,7 +23,7 @@ git clone https://github.com/AleronFrancois/CoCsystem.git
 
 **2. Install and setup dependancies**
   
-- You can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
+&nbsp;&nbsp;&nbsp;&nbsp;- You can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
   
 - Ensure that this line: **extension=pdo_mysql** is not commented-out in the **"C:\Program Files\php\php.ini"** file.
 
