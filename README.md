@@ -20,7 +20,7 @@ This system is collaboratively developed by ICT students from the **University o
 ```bash
 git clone https://github.com/AleronFrancois/CoCsystem.git
 ```
-##
+
 **2. Install and setup dependancies**
   
 - You can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
