@@ -21,15 +21,22 @@ This system is collaboratively developed by ICT students from the **University o
 git clone https://github.com/AleronFrancois/CoCsystem.git
 ```
 
-**3. Install and setup dependancies**
+**2. Install and setup dependancies**
 
 **For Windows**
   
-1. On windows you can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
+1. You can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
   
 2. Ensure that this line: **extension=pdo_mysql** is not commented-out in the **"C:\Program Files\php\php.ini"** file.
 
-**2. Setup database**
+3. Inside the project directory run ```bash
+   composer require vlucas/phpdotenv
+   ``` to enable **.env** file
+
+4. Create the **.env** in the **CoCsystem** directory and add the database credentials.
+
+
+**3. Setup database**
 
 Use this sql script to setup the necessary tables inside the database: 
 [Database setup script](https://github.com/AleronFrancois/CoCsystem/blob/main/setup/database.sql)
