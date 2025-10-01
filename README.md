@@ -32,5 +32,5 @@ Use this sql script to setup the necessary tables inside the database:
   
 1. On windows you can install the composer here: [Composer](https://getcomposer.org/Composer-Setup.exe)
   
-2. Ensure that this line: **extension=pdo_mysql** is not commented-out in the "C:\Program Files\php\php.ini" file.
+2. Ensure that this line: **extension=pdo_mysql** is not commented-out in the **"C:\Program Files\php\php.ini"** file.
 
