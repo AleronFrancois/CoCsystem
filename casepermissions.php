@@ -1,19 +1,19 @@
 <?php
 session_start();
-require "dbconn.php"; 
+require "includes/dbconn.php"; 
 
-if (!isset($_SESSION["user_id"])) {
+if (!isset($_SESSION["user_id"])) { //if logged out 
     header("Location: index.php");
     exit;
 }
 
-$userId = $_SESSION["user_id"];
-$caseId = $_SESSION["case_id"]; // Current case
+$userId = $_SESSION["user_id"]; 
+$caseId = $_SESSION["case_id"]; //current case
 $stmt = $conn->prepare("SELECT role FROM User WHERE id = ?");
 $stmt->execute([$userId]);
 $role = $stmt->fetchColumn();
 
-if ($role !== 'supervisor') {
+if ($role !== 'supervisor') { //ensures the user is a supervisor
     header("Location: index.php");
     exit;
 }
@@ -21,18 +21,18 @@ if ($role !== 'supervisor') {
 $message = "";
 
 $confirmUsername = "";
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user_id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user_id'])) {  //for adding investigators to a case
     $inputUserId = trim($_POST['add_user_id']);
 
     if ($inputUserId) {
         $stmt = $conn->prepare("SELECT username FROM User WHERE id = ?");
         $stmt->execute([$inputUserId]);
-        $username = $stmt->fetchColumn();
+        $username = $stmt->fetchColumn(); //get username
 
         if ($username) {
-            $confirmUsername = $username;
+            $confirmUsername = $username; //confirmation
 
-            if (isset($_POST['confirmed']) && $_POST['confirmed'] === 'yes') {
+            if (isset($_POST['confirmed']) && $_POST['confirmed'] === 'yes') {  //confirming the double check
                 $stmtInsert = $conn->prepare("INSERT INTO Case_User (case_id, user_id) VALUES (?, ?)");
                 if ($stmtInsert->execute([$caseId, $inputUserId])) {
                     $message = "$username added to the case successfully!";
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user_id'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_user_id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_user_id'])) { //for removing investigators from a case
     $removeUserId = $_POST['remove_user_id'];
 
     $stmtDel = $conn->prepare("DELETE FROM Case_User WHERE case_id = ? AND user_id = ?");
@@ -59,12 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_user_id'])) {
     }
 }
 
-$stmt = $conn->prepare("
+$stmt = $conn->prepare(" 
     SELECT U.id, U.username 
     FROM Case_User CU
     JOIN User U ON CU.user_id = U.id
     WHERE CU.case_id = ?
-");
+"); //gets investigators already on case
 $stmt->execute([$caseId]);
 $investigators = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -97,7 +97,7 @@ document.getElementById('addForm').addEventListener('submit', function(e) {
     if (!userIdInput) return;
 
     if (confirmUsername) {
-        const confirmed = confirm(`Do you want to add "${confirmUsername}" to the case?`);
+        const confirmed = confirm(`Do you want to add "${confirmUsername}" to the case?`); //pop up to ensure correct user going to be added
         if (!confirmed) {
             e.preventDefault();
         } else {

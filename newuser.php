@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "/dbconn.php"; 
+require "includes/dbconn.php"; 
 
 /*if (!isset($_SESSION["user_id"])) {
     header("Location: index.php");
