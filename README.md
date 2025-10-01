@@ -29,11 +29,10 @@ git clone https://github.com/AleronFrancois/CoCsystem.git
   
 2. Ensure that this line: **extension=pdo_mysql** is not commented-out in the **"C:\Program Files\php\php.ini"** file.
 
-3. Inside the project directory run
+3. To enable **.env** file, inside the project directory run
    ```bash
    composer require vlucas/phpdotenv
    ```
-   to enable **.env** file
 
 5. Create the **.env** in the **CoCsystem** directory and add the database credentials.
 
