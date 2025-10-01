@@ -1,4 +1,4 @@
-# CoCsystem
+<img width="1006" height="94" alt="image" src="https://github.com/user-attachments/assets/0cbf0668-5286-4a51-b6c9-179bcc8e789d" /># CoCsystem
 
 **CoCsystem** is a mini **Chain of Custody (CoC)** system designed to securely manage and store digital evidence during digital-forensic investigations.
 
@@ -12,6 +12,7 @@ This system is collaboratively developed by ICT students from the **University o
 - **SQL Relational Database**
 - **Web Server**
 - **vlucas/php.env**
+- **php-mysqlnd**
 
 ## Installation Guide
 For enterprise deployment, all dependancies must be installed on the server.
