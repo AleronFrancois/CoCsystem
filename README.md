@@ -7,5 +7,13 @@ This system is collaboratively developed by ICT students from the **University o
 - **Bronson Billing**
 - **Leroy Bellchambers**
 
-## Deployment
-Notes: Make sure to install vlucas/php.env
+## Dependencies
+- **PHP**
+- **SQL Relational Database**
+- **Web Server**
+
+## Installation Guide
+For enterprise deployment, dependancies must be installed on the server.
+
+**Clone repository**
+<pre> ```bash git clone https://github.com/AleronFrancois/CoCsystem.git ``` </pre>
