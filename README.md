@@ -16,4 +16,6 @@ This system is collaboratively developed by ICT students from the **University o
 For enterprise deployment, dependancies must be installed on the server.
 
 **Clone repository**
-<pre> ```bash git clone https://github.com/AleronFrancois/CoCsystem.git ``` </pre>
+```bash
+git clone https://github.com/AleronFrancois/CoCsystem.git
+
