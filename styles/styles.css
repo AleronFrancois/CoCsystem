@@ -1,37 +1,90 @@
 :root {
     --background-colour: #F0EEEE;
     --foreground-colour: #FAFAFA;
-    --selection-colour: #A8E8FF;
-    --unselected-colour: #8DC1D4;
-    --accent-colour: #9FB6F0;
+    --selection-colour: #000000;
+    --unselected-colour: #3c94bd;
+    --accent-colour: #3c94bd; 
 }
 
-.background {
-    background-color: var(--background-colour);
+.background { background-color: var(--background-colour); }
+.foreground { background-color: var(--foreground-colour); }
+.selection { background-color: var(--selection-colour); }
+.unselected { background-color: var(--unselected-colour); }
+.accent { background-color: var(--accent-colour); }
+
+.list-group-item { cursor: pointer; }
+
+.custom-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
-.foreground {
-    background-color: var(--foreground-colour);
-}
-.selection {
-    background-color: var(--selection-colour);
-}
-.unselected {
-    background-color: var(--unselected-colour);
-}
-.accent {
+
+.custom-navbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;  
+    min-height: 56px;    
     background-color: var(--accent-colour);
 }
 
-.list-group-item {
-    cursor: pointer;
+.custom-container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    position: relative; 
 }
 
 .navbar-nav {
-    margin: 0 auto;
-    display: flex;       
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.navbar-nav .nav-link {
+#profileButton {
+    position: absolute;
+    right: 1rem;
+}
+
+#backButton {
+    position: absolute;
+    left: 1rem;
+}
+
+.nav-item { margin-right: 1rem; }
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
+}
+
+.nav-link:hover { text-decoration: underline; }
+.nav-link.active { font-weight: bold; }
+
+.login-container {
+    width: 40%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    padding: 3rem;
+    border-radius: 3rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--foreground-colour);
 }

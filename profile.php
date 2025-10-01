@@ -12,25 +12,37 @@ include 'includes/dbconn.php'; // Connects to the database
 </head>
 
 <script defer>
-document.addEventListener("DOMContentLoaded", () => {
-    const backButton = document.getElementById("backButton");
-    backButton.addEventListener("click", () => {
-        history.back();
+    document.addEventListener("DOMContentLoaded", () => {
+        const backButton = document.getElementById("backButton");
+        backButton.addEventListener("click", () => {
+            history.back();
+        });
     });
-});
 </script>
 
-<body class="background d-flex flex-column vh-100">
-    <nav class="navbar navbar-expand-sm accent ">
-        <div class="container-fluid ">
+<body class="background custom-body">
+    <!-- Navigation menu -->
+    <nav class="navbar custom-navbar accent">
+        <div class="custom-container">
             <img src="images/back_icon.png" class="back-icon" role="button" id="backButton">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link active">Artefacts</a></li>
-                <li class="nav-item"><a class="nav-link">Review Evidence</a></li>
-                <li class="nav-item"><a class="nav-link">User Panel</a></li>
-                <li class="nav-item"><a class="nav-link">Info</a></li>
+                <li class="nav-item">
+                    <a class="nav-link active">Cases</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">Review Evidence</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">User Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">Info</a>
+                </li>
             </ul>
+            <img src="images/account_icon.svg" role="button" id="profileButton">
         </div>
     </nav>
 </body>
 </html>
+
+
