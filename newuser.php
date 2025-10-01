@@ -2,7 +2,7 @@
 session_start();
 require "/dbconn.php"; 
 
-if (!isset($_SESSION["user_id"])) {
+/*if (!isset($_SESSION["user_id"])) {
     header("Location: index.php");
     exit;
 }
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         echo "User not added"
     }
 }
-
+*/
 ?>
 <html lang="en">
 <head>
