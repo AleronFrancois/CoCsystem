@@ -1,8 +1,8 @@
 <?php
 session_start();
 require "includes/dbconn.php"; 
-
-/*if (!isset($_SESSION["user_id"])) {
+/*
+if (!isset($_SESSION["user_id"])) {
     header("Location: index.php");
     exit;
 }
@@ -11,18 +11,18 @@ $stmt = $conn->prepare("SELECT role FROM User WHERE id = ?");
 $stmt->execute([$userId]);
 $role = $stmt->fetchColumn();
 
-if ($role !== 'supervisor') {
+if ($role !== 'supervisor') { //checks user is a supervisor
     header("Location: index.php");
     exit;
 }
-    
+ */   
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['newUsername']);
     $password = $_POST['newPassword'];
     
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare("INSERT INTO User (username,password,role) VALUES (?,?,'investigator')");
+    $stmt = $conn->prepare("INSERT INTO User (username,password,role) VALUES (?,?,'investigator')"); //inserts new supervisor into db
     if($stmt->execute([$username,$hashedPassword])){
         echo "User Added succesfully";
     }
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "User not added";
     }
 }
-*/
+
 ?>
 <html lang="en">
 <head>
