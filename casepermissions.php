@@ -1,8 +1,14 @@
 <?php
 session_start();
+/*
+    Case permission management system
+    Allows supervisors to add and remove investigators on case
+    Note: Currently hardcoded for testing
+    #TODO ensure that it works without being hardcoded
+    */
 require "includes/dbconn.php"; 
 
-if (!isset($_SESSION["user_id"])) { //if logged out 
+/*if (!isset($_SESSION["user_id"])) { //if logged out 
     header("Location: index.php");
     exit;
 }
@@ -17,10 +23,14 @@ if ($role !== 'supervisor') { //ensures the user is a supervisor
     header("Location: index.php");
     exit;
 }
-
+*/
+$caseId = "2"; //currently hardcoded to test
+$stmt = $conn->prepare("SELECT `name` FROM `case` WHERE id = ?");
+$stmt->execute([$caseId]);
+$caseName = $stmt->fetchColumn();
 $message = "";
 
-$confirmUsername = "";
+$username = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user_id'])) {  //for adding investigators to a case
     $inputUserId = trim($_POST['add_user_id']);
 
@@ -30,17 +40,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user_id'])) {  //
         $username = $stmt->fetchColumn(); //get username
 
         if ($username) {
-            $confirmUsername = $username; //confirmation
-
             if (isset($_POST['confirmed']) && $_POST['confirmed'] === 'yes') {  //confirming the double check
-                $stmtInsert = $conn->prepare("INSERT INTO Case_User (case_id, user_id) VALUES (?, ?)");
-                if ($stmtInsert->execute([$caseId, $inputUserId])) {
-                    $message = "$username added to the case successfully!";
-                } else {
-                    $message = "Failed to add $username to the case.";
+                
+                $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM `Case_User` WHERE case_id = ? AND user_id = ?"); //check to ensure that investigator isnt already on case
+                $stmtCheck->execute([$caseId, $inputUserId]);
+                $alreadyExists = $stmtCheck->fetchColumn();
+
+                if ($alreadyExists > 0) {
+                $message = "$username is already assigned to this case.";
+                } 
+                else {
+                    //add user
+                    $stmtInsert = $conn->prepare("INSERT INTO Case_User (case_id, user_id) VALUES (?, ?)");
+                    if ($stmtInsert->execute([$caseId, $inputUserId])) {
+                        $message = "$username added to the case successfully!";
+                    } 
+                    else {
+                        $message = "Failed to add $username to the case.";
+                    }
                 }
             }
-        } else {
+        } 
+        else {
             $message = "User ID $inputUserId does not exist.";
         }
     } else {
@@ -77,9 +98,7 @@ $investigators = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<h2>Manage Investigators for Case</h2>
-
-<?php if ($message) echo "<p>$message</p>"; ?>
+<h2>Manage Investigators for Case <?php echo htmlspecialchars($caseId . " - " . $caseName); ?></h2>
 
 <h3>Add Investigator</h3>
 <form id="addForm" method="POST">
@@ -87,35 +106,51 @@ $investigators = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <input type="text" id="add_user_id" name="add_user_id" required>
     <input type="hidden" id="confirmed" name="confirmed" value="">
     <button type="submit">Add to Case</button>
+    <div id="confirmSpace"></div>
 </form>
 
-<script>
-const confirmUsername = "<?php echo $confirmUsername; ?>";
+<?php if ($message) echo "<p>$message</p>"; ?>
 
+<script>
 document.getElementById('addForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // stop default submit
+
+    const form = this;
     const userIdInput = document.getElementById('add_user_id').value.trim();
     if (!userIdInput) return;
-
-    if (confirmUsername) {
-        const confirmed = confirm(`Do you want to add "${confirmUsername}" to the case?`); //pop up to ensure correct user going to be added
-        if (!confirmed) {
-            e.preventDefault();
-        } else {
-            document.getElementById('confirmed').value = 'yes';
-        }
-    }
+    //double check
+    document.getElementById('confirmSpace').innerHTML = `
+        <p>Are you sure you want to add User ID <b>${userIdInput}</b> to the case?</p>
+        <button type="button" id="confirmYes">Yes</button>
+        <button type="button" id="confirmNo">No</button>
+    `;
+    //if yes clicked
+    document.getElementById("confirmYes").onclick = () => {
+        document.getElementById('confirmed').value = 'yes';
+        form.submit();
+    };
+    //if no clicked
+    document.getElementById("confirmNo").onclick = () => {
+        document.getElementById('confirmSpace').innerHTML = "";
+    };
 });
 </script>
 
+
+
+
 <h3>Investigators on Case</h3>
-<table>
+<table border=1>
     <tr>
         <th>Investigator Name</th>
+        <th>Investigator ID</th>
         <th>Action</th>
     </tr>
+    <!-- creates the table of investigators on case -->
     <?php foreach ($investigators as $inv): ?>
     <tr>
         <td><?php echo htmlspecialchars($inv['username']); ?></td>
+        <td><?php echo $inv['id']?></td>
         <td>
             <form method="POST" onsubmit="return confirm('Remove <?php echo ($inv['username']); ?> from this case?');">
                 <input type="hidden" name="remove_user_id" value="<?php echo $inv['id']; ?>">
