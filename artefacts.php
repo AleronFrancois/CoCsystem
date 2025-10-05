@@ -1,3 +1,69 @@
+<?php
+
+require "includes/blob_uploader.php";
+require "includes/metadata_extractor.php";
+
+session_start();
+
+$caseId = $_GET['caseid'];
+$userId = null;
+$userRole = null;
+
+$metadata = array();
+
+if (isset($_SESSION['id'])) {
+    $userId = $_SESSION['id'];
+    $userRole = $_SESSION['role'];
+
+    require "includes/dbconn.php";
+
+    try {
+        $stmt = $conn->prepare("SELECT * FROM `Case_User` WHERE `user_id` = ? AND `case_id` = ?");
+        $stmt->execute([$userId, $caseId]);
+        $results = $stmt->fetchAll();
+    } catch (PDOException $e) {
+        echo "Error! ". $e->getMessage();
+        exit;
+    }
+    
+    if (count($results) == 0) {
+        include "components/access_denied.php";
+        exit;
+    } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Handle errors
+        if (!isset($_FILES['artefactFile']) || $_FILES['artefactFile']['error'] !== UPLOAD_ERR_OK) {
+            echo $_FILES['artefactFile']['error'];
+            echo "Error! File upload failed";
+            exit;
+        } else if ($_POST['artefactName'] == null || trim($_POST['artefactName']) == "") {
+            echo "Error! Artefact name is required";
+            exit;
+        }
+
+        // Upload file to BLOB storage
+        $filePath = upload_file_to_blob($_FILES['artefactFile']);
+        if ($filePath == "ERROR") {
+            echo "Error! File upload to BLOB failed";
+            exit;
+        }
+
+        try {
+            $evidenceName = $_POST['artefactName'];
+            
+            $stmt = $conn->prepare("INSERT INTO `Evidence` (name, location, uploader_id) VALUES (?, ?, ?)");
+            $stmt->execute([$evidenceName, $filePath, $userId]);
+            $results = $stmt->fetchAll();
+        } catch (PDOException $e) {
+            exit("Error! ". $e->getMessage());
+        }
+    }
+} else {
+    header("Location: index.php");
+    exit;
+}
+
+?>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -5,6 +71,7 @@
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <link rel="stylesheet" href="styles/styles.css">
     <script src="scripts/bootstrap.bundle.min.js" defer></script>
+    <script src="scripts/scripts.js" defer></script>
 </head>
 
 <!--         Handles Uploading Evidence Artefact
@@ -16,7 +83,7 @@
              3. Log successful artefact upload.
              4. Load case name instead of [CASE].
 -->
-<script defer>
+<!-- <script defer>
     document.addEventListener("DOMContentLoaded", () => {
         // Back button loads the previous page
         const backButton = document.getElementById("backButton");
@@ -84,7 +151,7 @@
             }
         });
     });
-</script>
+</script> -->
 
 <body class="background custom-body">
     <!-- Navigation menu -->
@@ -138,36 +205,63 @@
     <div class="modal fade" id="addArtefactModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5">New Artefact</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <!-- Artefact Name -->
-                    <div class="mb-3">
-                        <label for="artefactName" class="form-label">Artefact Name</label>
-                        <input type="text" class="form-control" id="artefactName" placeholder="Enter artefact name">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">New Artefact</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <!-- Artefact Description -->
-                    <div class="mb-3">
-                        <label for="artefactDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="artefactDescription" rows="5" placeholder="Enter artefact description"></textarea>
+                    <div class="modal-body">
+                        
+                            <!-- Artefact Name -->
+                            <div class="mb-3">
+                                <label for="artefactName" class="form-label">Artefact Name</label>
+                                <input type="text" class="form-control" id="artefactName" placeholder="Enter artefact name" name="artefactName" required>
+                            </div>
+
+                            <!-- File Upload -->
+                            <div class="mb-3">
+                                <label for="artefactFile" class="form-label">Upload File</label>
+                                <input type="file" class="form-control" id="artefactFile" name="artefactFile" required>
+                            </div>
+
+                            <!-- Artefact Creation time -->
+                            <div class="mb-3">
+                                <label for="artefactCreationTime" class="form-label">Artefact Creation Time</label>
+                                <input type="datetime-local" class="form-control" id="artefactCreationTime" name="artefactCreationTime">
+                            </div>
+
+                            <!-- Artefact Last Modification time -->
+                            <div class="mb-3">
+                                <label for="artefactModificationTime" class="form-label">Artefact Last Modification Time</label>
+                                <input type="datetime-local" class="form-control" id="artefactModificationTime" name="artefactModificationTime">
+                            </div>
+
+                            <!-- Artefact Last Access time -->
+                            <div class="mb-3">
+                                <label for="artefactAccessTime" class="form-label">Artefact Last Access Time</label>
+                                <input type="datetime-local" class="form-control" id="artefactAccessTime" name="artefactAccessTime">
+                            </div>
+
+                            <p>Note: Due to security limitations present in most browsers and the HTTP protocol, file modification, access, and creation times cannot be accessed automatically. The above time fields are optional</p>
+
+                            <!-- Comment -->
+                            <?= $userRole == 'investigator' ? '
+                            <div class="mb-3">
+                                <label for="artefactComment" class="form-label">Upload File</label>
+                                <textarea rows="3" type="text" class="form-control" id="artefactComment" name="artefactComment" placeholder="Enter a comment for your supervisor"></textarea>
+                            </div>
+                            ' : '';
+                            ?>
+                        
                     </div>
 
-                    <!-- File Upload -->
-                    <div class="mb-3">
-                        <label for="artefactFile" class="form-label">Upload File</label>
-                        <input type="file" class="form-control" id="artefactFile">
+                    <!-- Create artefact -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="createArtefactButton">Create Artefact</button>
                     </div>
-                </div>
-
-                <!-- Create artefact -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="createArtefactButton">Create Artefact</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>

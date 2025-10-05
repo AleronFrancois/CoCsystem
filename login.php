@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password']; // Gets password from user
 
     // Prepares sql query and fetches user records
-    $stmt = $conn->prepare("SELECT id, username, password FROM User WHERE username = ?");
+    $stmt = $conn->prepare("SELECT id, username, password, role FROM User WHERE username = ?");
     $stmt->execute([$username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["loggedin"] = true;
         $_SESSION["id"] = $user['id'];
         $_SESSION["username"] = $user['username'];
+        $_SESSION['role'] = $user['role'];
         header("Location: cases.php"); // Loads home page
         exit;
     } 
