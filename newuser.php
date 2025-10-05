@@ -1,21 +1,21 @@
 <?php
 session_start();
 require "includes/dbconn.php"; 
-/*
-if (!isset($_SESSION["user_id"])) {
+
+if (!isset($_SESSION["id"])) {
     header("Location: index.php");
     exit;
 }
-$userId = $_SESSION["user_id"];
+$userId = $_SESSION["id"];
 $stmt = $conn->prepare("SELECT role FROM User WHERE id = ?");
 $stmt->execute([$userId]);
 $role = $stmt->fetchColumn();
 
 if ($role !== 'supervisor') { //checks user is a supervisor
-    header("Location: index.php");
+    header("Location: cases.php");
     exit;
 }
- */   
+  
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['newUsername']);
     $password = $_POST['newPassword'];

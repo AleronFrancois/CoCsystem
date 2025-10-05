@@ -97,7 +97,7 @@
                     <a class="nav-link">Review Evidence</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">User Panel</a>
+                    <a class="nav-link" href="userpanel.php">User Panel</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link">Info</a>
