@@ -48,13 +48,42 @@ if (isset($_SESSION['id'])) {
         }
 
         try {
+
+            $conn->beginTransaction();
+
+            // Extract metadata from file
+            $metadata = extract_metadata_values($_FILES['artefactFile']);
+
+            // Insert evidence into database
             $evidenceName = $_POST['artefactName'];
             
-            $stmt = $conn->prepare("INSERT INTO `Evidence` (name, location, uploader_id) VALUES (?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO `Evidence` (`name`, `location`, `uploader_id`) VALUES (?, ?, ?)");
             $stmt->execute([$evidenceName, $filePath, $userId]);
-            $results = $stmt->fetchAll();
-        } catch (PDOException $e) {
-            exit("Error! ". $e->getMessage());
+            $evidenceID = $conn->lastInsertId();
+
+            // Insert metadata into the database
+            $stmt = $conn->prepare('INSERT INTO `Metadata` (`evidence_id`, `key`, `value`) VALUES (?, ?, ?)');
+            
+            foreach ($metadata as $key => $value) {
+                $stmt->execute([$evidenceID, $key, $value]);
+            }
+
+            $conn->commit();
+
+            // Generate hash
+
+            $fileHash = hash_file('sha256', $_FILES['artefactFile']['tmp_name']);
+
+            // Insert custody log 
+            $sql = "INSERT INTO `EvidenceCustodyAction` (`action`, `description`, `evidence_hash`, `action_hash`, `user_id`, `evidence_id`) VALUES ('upload', 'Upload evidence file', '$fileHash', '$fileHash', '$userId', '$evidenceID')";
+            $conn->exec($sql);
+
+            header("Location: artefacts.php?caseid=$caseId");
+            exit;
+        } catch (Exception $e) {
+            $conn->rollBack();
+            echo "Failed: " . $e->getMessage();
+            exit;
         }
     }
 } else {
