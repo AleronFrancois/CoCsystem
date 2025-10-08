@@ -26,7 +26,8 @@ $investigators = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="styles/styles.css">
     <title>User Panel</title>
 </head>
-<body>
+<body> 
+    <?php include "components/navbar.php"?>
     <h1>User Panel</h1>
     <table border="1">
         <tr>

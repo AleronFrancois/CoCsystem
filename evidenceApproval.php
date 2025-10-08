@@ -40,6 +40,7 @@ $pending = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Evidence Approval</title>
 </head>
     <body>
+        <?php include "components/navbar.php"?>
         <header><h1>Evidence Approval</h1></header>
 
         <?php if (empty($pending)): ?>
