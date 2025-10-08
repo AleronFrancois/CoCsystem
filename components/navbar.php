@@ -1,3 +1,7 @@
+<head>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
 <nav class="navbar custom-navbar accent">
         <div class="custom-container">
             <ul class="navbar-nav">

@@ -29,7 +29,7 @@ $investigators = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body> 
     <?php include "components/navbar.php"?>
     <h1>User Panel</h1>
-    <table border="1">
+    <table>
         <tr>
             <th>Investigator ID</th>
             <th>Investigator Name</th>

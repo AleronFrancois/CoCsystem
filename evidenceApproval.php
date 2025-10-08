@@ -46,18 +46,20 @@ $pending = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php if (empty($pending)): ?>
             <p>No pending evidence found.</p>
     <?php else: ?>
-        <?php foreach ($pending as $case): ?>
-            <div class="pendingCase">
-                <h2><?php echo htmlspecialchars($case['name']); ?></h2>
-                <p>Location: <?php echo htmlspecialchars($case['location']); ?></p>
-                <p>Uploaded by: <?php echo htmlspecialchars($case['uploader_name']); ?></p>
-                <form action="includes/process_approval.php" method="POST">
-                    <input type="hidden" name="evidence_id" value="<?php echo $case['id']; ?>">
-                    <button type="submit" name="action" value="approve">Approve</button>
-                    <button type="submit" name="action" value="reject">Reject</button>
-                </form>
-            </div>
-        <?php endforeach; ?>
+        <div class="pendingCasesContainer">
+            <?php foreach ($pending as $case): ?>
+                <div class="pendingCase">
+                    <h2><?php echo htmlspecialchars($case['name']); ?></h2>
+                    <p>Location: <?php echo htmlspecialchars($case['location']); ?></p>
+                    <p>Uploaded by: <?php echo htmlspecialchars($case['uploader_name']); ?></p>
+                    <form action="includes/process_approval.php" method="POST">
+                        <input type="hidden" name="evidence_id" value="<?php echo $case['id']; ?>">
+                        <button type="submit" name="action" value="approve">Approve</button>
+                        <button type="submit" name="action" value="reject">Reject</button>
+                    </form>
+                </div>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
 </body>
 </html>
