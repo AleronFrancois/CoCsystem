@@ -75,7 +75,7 @@ if (isset($_SESSION['id'])) {
             $fileHash = hash_file('sha256', $_FILES['artefactFile']['tmp_name']);
 
             // Insert custody log 
-            $sql = "INSERT INTO `EvidenceCustodyAction` (`action`, `description`, `evidence_hash`, `action_hash`, `user_id`, `evidence_id`) VALUES ('upload', 'Upload evidence file', '$fileHash', '$fileHash', '$userId', '$evidenceID')";
+            $sql = "INSERT INTO `EvidenceCustodyAction` (`action`, `description`, `evidence_hash`, `user_id`, `evidence_id`) VALUES ('upload', 'Upload evidence file', '$fileHash', '$userId', '$evidenceID')";
             $conn->exec($sql);
 
             header("Location: artefacts.php?caseid=$caseId");
