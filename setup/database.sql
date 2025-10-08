@@ -50,7 +50,6 @@ CREATE TABLE `CaseCustodyAction` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `timestamp` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   `action` ENUM('create', 'close', 'reopen', 'assign', 'unassign') NOT NULL,
-  `action_hash` CHAR(64) NOT NULL,
   `user_id` INT NOT NULL,
   `case_id` INT NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `User`(`id`),
