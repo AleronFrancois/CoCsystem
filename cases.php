@@ -94,7 +94,7 @@
                     <a class="nav-link active">Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Review Evidence</a>
+                    <a class="nav-link" href="evidenceApproval.php">Review Evidence</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="userpanel.php">User Panel</a>
