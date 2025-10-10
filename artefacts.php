@@ -8,6 +8,7 @@ session_start();
 $caseId = $_GET['caseid'];
 $userId = null;
 $userRole = null;
+$comment = false;
 
 $metadata = array();
 
@@ -59,29 +60,47 @@ if (isset($_SESSION['id'])) {
             
             $stmt = $conn->prepare("INSERT INTO `Evidence` (`name`, `location`, `uploader_id`) VALUES (?, ?, ?)");
             $stmt->execute([$evidenceName, $filePath, $userId]);
-            $evidenceID = $conn->lastInsertId();
+            $evidenceId = $conn->lastInsertId();
 
             // Insert metadata into the database
             $stmt = $conn->prepare('INSERT INTO `Metadata` (`evidence_id`, `key`, `value`) VALUES (?, ?, ?)');
             
-            foreach ($metadata as $key => $value) {
-                $stmt->execute([$evidenceID, $key, $value]);
+            // Insert manually provided metadata
+            $manualMetadataFields = ['artefactCreationTime', 'artefactModificationTime', 'artefactAccessTime'];
+            foreach ($manualMetadataFields as $field) {
+                if (isset($_POST[$field]) && $_POST[$field] != null && trim($_POST[$field]) != "") {
+                    $metadata[$field] = $_POST[$field];
+                }
             }
 
-            $conn->commit();
+            foreach ($metadata as $key => $value) {
+                $stmt->execute([$evidenceId, $key, $value]);
+            }
+
+            // Insert comment if the user provided one
+            if (isset($_POST['artefactComment']) && trim($_POST['artefactComment']) != "") {
+                $comment = true;
+                $stmt = $conn->prepare('INSERT INTO `Comment` (`content`, `commenter_id`, `case_id`, `evidence_id`) VALUES (?, ?, ?, ?)');
+                $stmt->execute([trim($_POST['artefactComment']), $userId, $caseId, $evidenceId]);
+            }
 
             // Generate hash
 
             $fileHash = hash_file('sha256', $_FILES['artefactFile']['tmp_name']);
 
-            // Insert custody log 
-            $sql = "INSERT INTO `EvidenceCustodyAction` (`action`, `description`, `evidence_hash`, `user_id`, `evidence_id`) VALUES ('upload', 'Upload evidence file', '$fileHash', '$userId', '$evidenceID')";
-            $conn->exec($sql);
+            // Insert custody logs
+            $stmt = $conn->prepare("INSERT INTO `EvidenceCustodyAction` (`action`, `description`, `evidence_hash`, `user_id`, `evidence_id`) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute(['upload', 'Upload evidence file', $fileHash, $userId, $evidenceId]);
+            if ($comment) {
+                $stmt->execute(['comment', "User {$userId} left a comment on this piece of evidence, under case {$caseId}.", $fileHash, $userId, $evidenceId]);
+            }
+            
+
+            $conn->commit();
 
             header("Location: artefacts.php?caseid=$caseId");
             exit;
         } catch (Exception $e) {
-            $conn->rollBack();
             echo "Failed: " . $e->getMessage();
             exit;
         }
