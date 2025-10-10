@@ -1,11 +1,10 @@
 <?php
 /* 
-          Login Authentication System
+          === login.php ===
 Author..: Aleron Francois (691807)
 Date....: 10/01/2025 - x/x/2025
 Info....: This script handles the authentication of users and
           takes them to the home page (cases.php).
-Notes...: This only authenticates uses with a hased password.
 */
 session_start(); // Start session
 include 'includes/dbconn.php'; // Use database credentials

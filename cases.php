@@ -7,83 +7,112 @@
     <script src="scripts/bootstrap.bundle.min.js" defer></script>
 </head>
 
-<!--         Handles Adding Case
+
+<!--    
+             === cases.php ===
     Author.: Aleron Francois (691807) & ...
     Date...: 1/10/2025 - x/x/2025
-    NOTE...: Does not yet create a case in the database (Only creates case client-side)
-    TODO...: 1. Connect to database and upload/store new case.
-                2. Confirm case creation.
-                3. Log successful case creation.
-                4. When loading artefacts.php, parse case name to load specific case the user clicked on
+    Info...: Gets cases from database and displays all cases
+             in list. Also displays case info and redirects to 
+             the cases evidence page.
 -->
 <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Profile icon loads profile page
-        const profileButton = document.getElementById("profileButton");
-        profileButton.addEventListener("click", () => {
-            window.location.href = "profile.php";
-        });
+document.addEventListener("DOMContentLoaded", () => {
+    const profileButton = document.getElementById("profileButton");          // Profile button
+    const createButton = document.getElementById("createCaseButton");        // Create new case button
+    const caseNameInput = document.getElementById("caseName");               // Create new case -- input case name
+    const caseDescriptionInput = document.getElementById("caseDescription"); // Create new case -- input case description
+    const caseList = document.querySelector("ol.list-group");                // List of all cases
 
-        // Gets the reference to the necessary elements 
-        const createButton = document.getElementById("createCaseButton");
-        const caseNameInput = document.getElementById("caseName");
-        const caseDescriptionInput = document.getElementById("caseDescription");
-        const caseList = document.querySelector("ol.list-group");
-
-        // Handles the case creation on button click
-        createButton.addEventListener("click", () => {
-            const caseName = caseNameInput.value.trim();
-
-            // Checks if case name is not empty and creates the case 
-            if (caseName !== "") {
-                const list = document.createElement("li");
-                list.className = "list-group-item d-flex align-items-center";
-
-                // Icon details
-                const img = document.createElement("img");
-                img.src = "images/evidence_folder.png"; 
-                img.alt = "Evidence Folder";
-                img.className = "me-2";
-                img.style.width = "24px";
-                img.style.height = "24px";
-
-                // Adds a case icon, name and datetime to the case list
-                const span = document.createElement("span");
-                span.textContent = caseName;
-                const timeSpan = document.createElement("small");
-                timeSpan.textContent = new Date().toLocaleString();
-                timeSpan.className = "text-muted ms-auto";
-                list.appendChild(img);
-                list.appendChild(span);
-                list.appendChild(timeSpan)
-                caseList.appendChild(list);
-                
-                // Store case description and display case info on click
-                list.dataset.description = caseDescriptionInput.value.trim();
-                list.addEventListener("click", () => {
-                    const infoPanel = document.querySelector(".col-4 div div");
-                    infoPanel.innerHTML = `
-                        <p><strong>Name:</strong> ${caseName}</p>
-                        <p><strong>Description:</strong> ${list.dataset.description}</p>
-                        <p><strong>Created:</strong> ${timeSpan.textContent}</p>
-                    `;
-                });
-
-                // Open case and load evidence page
-                list.addEventListener("dblclick", () => {
-                    const caseName = caseNameInput.value.trim();
-                    window.location.href = 'artefacts.php';
-                });
-
-                // Clear text fields and close popup
-                caseNameInput.value = "";
-                caseDescriptionInput.value = "";
-                const modal = bootstrap.Modal.getInstance(document.getElementById("addCaseModal"));
-                modal.hide();
-            }
-        });
+    // Profile button
+    profileButton.addEventListener("click", () => {
+        window.location.href = "profile.php"; // Loads user's profile page
     });
+
+    // Load all cases from the database
+    fetch("get_cases.php?action=get_cases")
+        .then(res => res.text()) 
+        .then(text => {
+            const jsonStart = text.indexOf('[');
+            if (jsonStart === -1) throw new Error('No JSON found in response');
+            const cleanText = text.slice(jsonStart);
+            const data = JSON.parse(cleanText);
+            caseList.innerHTML = "";
+            data.forEach(c => addCaseToList(c.name, c.description, c.creation_date, c.id));
+        })
+        .catch(err => console.error("...error loading cases:", err));
+
+    
+    /*
+                 === addCaseToList() ===
+        Info...: Creates and adds a new case to the list. Each case includes a
+                 name, icon, creation date and description.
+                 Sets up click event handlers.
+                 
+        Param..: name, description, createDate, id
+        Return.: none
+    */
+    function addCaseToList(name, description, creationDate, id) {
+        const list = document.createElement("li");
+        list.className = "list-group-item d-flex align-items-center";
+        list.dataset.id = id;
+        list.dataset.description = description;
+
+        // Case icon
+        const img = document.createElement("img");
+        img.src = "images/evidence_folder.png";
+        img.alt = "Evidence Folder";
+        img.className = "me-2";
+        img.style.width = "24px";
+        img.style.height = "24px";
+
+        // Name & date of case
+        const span = document.createElement("span");
+        span.textContent = name;
+        const timeSpan = document.createElement("small");
+        timeSpan.textContent = new Date(creationDate).toLocaleString();
+        timeSpan.className = "text-muted ms-auto";
+
+        // Add case attributes to list
+        list.appendChild(img);
+        list.appendChild(span);
+        list.appendChild(timeSpan);
+        caseList.appendChild(list);
+
+        // Display case info on click
+        list.addEventListener("click", () => {
+            const infoPanel = document.querySelector(".col-4 div div");
+            const descriptionText = description ? description : "No description provided atm (TODO: get description)"; // TODO: we gotta get the description later on
+            infoPanel.innerHTML = `
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Description:</strong> ${descriptionText}</p>
+                <p><strong>Created:</strong> ${new Date(creationDate).toLocaleString()}</p>
+            `;
+        });
+
+        // Open case on double click
+        list.addEventListener("dblclick", () => {
+            window.location.href = `artefacts.php?case_id=${id}`;
+        });
+    }
+
+    // Handle create a new case
+    createButton.addEventListener("click", () => {
+        const caseName = caseNameInput.value.trim();
+        if (!caseName) return;
+        const description = caseDescriptionInput.value.trim();
+        const currentDate = new Date().toISOString();
+        const tempId = Date.now();
+        addCaseToList(caseName, description, currentDate, tempId);
+
+        // Clear modal
+        caseNameInput.value = "";
+        caseDescriptionInput.value = "";
+        bootstrap.Modal.getInstance(document.getElementById("addCaseModal")).hide();
+    });
+});
 </script>
+
 
 <body class="background custom-body">
     <!-- Navigation menu -->
@@ -94,13 +123,13 @@
                     <a class="nav-link active">Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="evidenceApproval.php">Review Evidence</a>
+                    <a class="nav-link" href="evidence_approval.php">Review Evidence</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="userpanel.php">User Panel</a>
+                    <a class="nav-link" href="user_panel.php">User Panel</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Info</a>
+                    <a class="nav-link" href="info.html">Info</a>
                 </li>
             </ul>
             <img src="images/account_icon.svg" role="button" id="profileButton">

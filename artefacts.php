@@ -198,7 +198,7 @@ if (isset($_SESSION['id'])) {
                     <a class="nav-link">User Panel</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Info</a>
+                    <a class="nav-link" href="info.html">Info</a>
                 </li>
             </ul>
             <img src="images/account_icon.svg" role="button" id="profileButton">

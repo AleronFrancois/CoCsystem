@@ -30,13 +30,13 @@ include 'includes/dbconn.php'; // Connects to the database
                     <a class="nav-link active">Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Review Evidence</a>
+                    <a class="nav-link" href="evidence_approval.php">Review Evidence</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">User Panel</a>
+                    <a class="nav-link" href="user_panel.php">User Panel</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link">Info</a>
+                    <a class="nav-link" href="info.html">Info</a>
                 </li>
             </ul>
             <img src="images/account_icon.svg" role="button" id="profileButton">
