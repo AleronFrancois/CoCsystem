@@ -1,5 +1,15 @@
 <?php
 include 'includes/dbconn.php'; // Connects to the database
+session_start();
+if (!isset($_SESSION["id"])) {
+    header("Location: index.php");
+    exit;
+}
+$userId = $_SESSION["id"];
+$stmt = $conn->prepare("SELECT `role`, username FROM User WHERE id = ?");
+$stmt->execute([$userId]);
+$userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <html>
@@ -42,7 +52,12 @@ include 'includes/dbconn.php'; // Connects to the database
             <img src="images/account_icon.svg" role="button" id="profileButton">
         </div>
     </nav>
+    <main>
+        <?php echo "<h1>" . $userinfo['username'] . "</h1>" ?>
+        <?php echo "<p> ID:" . $userId . " Role: " . $userinfo['role'] . " </p>" ?>
+        <a value="reject" href="components/logout.php">Log Out</button>
 </body>
 </html>
+
 
 

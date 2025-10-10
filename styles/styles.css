@@ -109,10 +109,10 @@
     overflow-wrap: break-word;
     max-width: 100%;      
 }
-.pendingCase button[value="reject"]:hover {
+button[value="reject"]:hover {
     background-color: #dc2417; 
 }
-.pendingCase button[value="approve"]:hover {
+button[value="approve"]:hover {
     background-color: #148f36; 
 }
 table {
