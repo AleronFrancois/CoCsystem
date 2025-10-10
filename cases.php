@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Open case on double click
         list.addEventListener("dblclick", () => {
-            window.location.href = `artefacts.php?case_id=${id}`;
+            window.location.href = `artefacts.php?caseid=${id}`;
         });
     }
 
