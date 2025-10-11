@@ -9,6 +9,7 @@ $caseId = $_GET['caseid'];
 $userId = null;
 $userRole = null;
 $comment = false;
+$artefacts = array();
 
 $metadata = array();
 
@@ -84,6 +85,10 @@ if (isset($_SESSION['id'])) {
                 $stmt->execute([trim($_POST['artefactComment']), $userId, $caseId, $evidenceId]);
             }
 
+            // Link evidence to case
+            $stmt = $conn->prepare("INSERT INTO `Case_Evidence` (`case_id`, `evidence_id`) VALUES (?, ?)");
+            $stmt->execute([$caseId, $evidenceId]);
+
             // Generate hash
 
             $fileHash = hash_file('sha256', $_FILES['artefactFile']['tmp_name']);
@@ -104,6 +109,10 @@ if (isset($_SESSION['id'])) {
             echo "Failed: " . $e->getMessage();
             exit;
         }
+    } else {
+        $stmt = $conn->prepare('SELECT `Evidence`.* FROM `Evidence` INNER JOIN `Case_Evidence` ON `Evidence`.`id` = `Case_Evidence`.`evidence_id` WHERE `Case_Evidence`.`case_id` = ?');
+        $stmt->execute([$caseId]);
+        $artefacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 } else {
     header("Location: index.php");
@@ -235,7 +244,38 @@ if (isset($_SESSION['id'])) {
                 </div>
                 <hr>
                 <!-- list of Artefacts -->
-                <ol class="list-group flex-grow-1 overflow-auto mb-0"></ol>
+                <ol class="list-group flex-grow-1 overflow-auto mb-0">
+                    <?php
+                    # Add artefacts
+                    foreach ($artefacts as $artefact) {
+                        echo '
+                            <li class="
+                                list-group-item
+                                d-flex
+                                align-items-center
+                                justify-content-between
+                            " 
+                            id="artefact_' . htmlspecialchars($artefact['id']) . '"
+                            onclick="handleArtefactClick(event)"
+                            >
+                                <div>
+                                    <img src="images/evidence.png" alt="Evidence Artefact" class="me-2" style="width: 24px; height: 24px;">
+                                    <span>' . htmlspecialchars($artefact['name']) . '</span>
+                                </div>
+                                <div id="buttonGroupArtefact_' . $artefact['id'] . '" hidden>
+                                    <button class="btn btn-sm py-0" onclick="downloadArtefact(event, ' . $artefact['id'] . ')">
+                                        <img src="images/download_icon.svg" alt="Download Artefact" style="width: 20px; height: 20px;">
+                                    </button>
+                                    <button class="btn btn-sm p-0" onclick="rehashArtefact(event, ' . $artefact['id'] . ')">
+                                        <img src="images/rehash_icon.svg" alt="Rehash Artefact" style="width: 20px; height: 20px;">
+                                    </button>
+                                </div>
+                            </li>';
+                    }
+                    ?>
+
+                </ol>
+                
             </div>
         </div>
         <div class="col-4 d-flex flex-column">

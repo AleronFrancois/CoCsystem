@@ -5,20 +5,23 @@ function redirectAfterDelay() {
 }
 
 /**
- * Handles the submission of a new artefact.
+ * Makes the artefact list item clickable. Once clicked, the artefact changes colour and provides additional buttons to 
+ * download, or rehash the artefact. It also changes the context men to show metadata or allow the user to comment
  */
-function submitNewArtefact(event) {
-    // Gets the reference to the necessary elements 
-    const createButton = document.getElementById("createArtefactButton");
-    const artefactNameInput = document.getElementById("artefactName");
-    const artefactDescriptionInput = document.getElementById("artefactDescription");
-    const artefactComment = document.getElementById("artefactComment");
+function handleArtefactClick(event) {
+    const listItem = event.currentTarget;
+    const artefactId = listItem.id.replace('artefact_', '');
 
-    event.preventDefault();
-    console.log("Submit New Artefact button clicked");
-    artefactNameInput.value = "";
-    artefactDescriptionInput.value = "";
-    const modal = bootstrap.Modal.getInstance(document.getElementById("addArtefactModal"));
-    modal.hide();
+    // Deselect the currently selected item
+    document.querySelectorAll('.list-group-item').forEach(item => {
+        if (item.classList.contains('active')) {
+            item.classList.remove('active');
+            document.getElementById('buttonGroupArtefact_' + item.id.replace('artefact_', '')).hidden = true;
+        }
+    });
+
+    listItem.classList.add('active');
+    document.getElementById('buttonGroupArtefact_' + artefactId).hidden = false;
+    
     
 }

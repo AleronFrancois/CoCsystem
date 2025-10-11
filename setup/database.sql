@@ -31,7 +31,6 @@ CREATE TABLE `EvidenceCustodyAction` (
   `action` ENUM('download', 'upload', 'lock', 'unlock', 'comment', 'assign', 'rehash', 'unassign') NOT NULL,
   `description` TEXT NOT NULL,
   `evidence_hash` CHAR(64) NOT NULL,
-  `action_hash` CHAR(64) NOT NULL,
   `user_id` INT NOT NULL,
   `evidence_id` INT NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `User`(`id`),
