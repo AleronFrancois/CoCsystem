@@ -121,6 +121,11 @@ table {
     margin: 20px 0;
 }
 
+p {
+    font-size: large;
+    font-weight: 500;
+}
+
 th, td {
     padding: 12px 15px;
     border: 1px solid #ddd;

@@ -11,6 +11,10 @@ function redirectAfterDelay() {
 function handleArtefactClick(event) {
     const listItem = event.currentTarget;
     const artefactId = listItem.id.replace('artefact_', '');
+    const artefactInfoPanel = document.getElementById('artefactInfoPanel');
+    const metadataList = document.getElementById('metadataList');
+
+    let metadata = [];
 
     // Deselect the currently selected item
     document.querySelectorAll('.list-group-item').forEach(item => {
@@ -23,5 +27,14 @@ function handleArtefactClick(event) {
     listItem.classList.add('active');
     document.getElementById('buttonGroupArtefact_' + artefactId).hidden = false;
     
-    
+    // Get the artefact metadata and display it
+    metadataList.innerHTML = ''; // Clear previous metadata
+    listItem.getAttribute('data-metadata').split(',').forEach(entry => {
+       
+        splitData = entry.split(':');
+        metadataList.appendChild(document.createElement('div')).innerHTML = '<p class="text-muted m-0">' + splitData[0] + '</p><p>' + splitData[1] + '</p>';
+    });
+
+    document.getElementById('evidenceName').innerHTML = listItem.getAttribute('data-name');
+
 }

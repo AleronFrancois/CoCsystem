@@ -110,7 +110,22 @@ if (isset($_SESSION['id'])) {
             exit;
         }
     } else {
-        $stmt = $conn->prepare('SELECT `Evidence`.* FROM `Evidence` INNER JOIN `Case_Evidence` ON `Evidence`.`id` = `Case_Evidence`.`evidence_id` WHERE `Case_Evidence`.`case_id` = ?');
+        $stmt = $conn->prepare('
+            SELECT 
+                `Evidence`.id,
+                `Evidence`.name,
+                `Evidence`.location,
+                `Evidence`.locked,
+                `Evidence`.uploader_id,
+                GROUP_CONCAT(DISTINCT CONCAT(`Metadata`.`key`, ":", `Metadata`.`value`) SEPARATOR ",") AS metadata
+            FROM `Evidence` 
+            LEFT JOIN `Case_Evidence` ON `Evidence`.`id` = `Case_Evidence`.`evidence_id` 
+            LEFT JOIN `Metadata` ON `Evidence`.`id` = `Metadata`.`evidence_id`
+            WHERE `Case_Evidence`.`case_id` = ? AND
+            `Evidence`.approved = "approved"
+            GROUP BY `Evidence`.id
+            ORDER BY `Evidence`.id ASC' 
+        );
         $stmt->execute([$caseId]);
         $artefacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -257,6 +272,8 @@ if (isset($_SESSION['id'])) {
                             " 
                             id="artefact_' . htmlspecialchars($artefact['id']) . '"
                             onclick="handleArtefactClick(event)"
+                            data-metadata="' . $artefact['metadata'] . '"
+                            data-name="' . htmlspecialchars($artefact['name']) . '"
                             >
                                 <div>
                                     <img src="images/evidence.png" alt="Evidence Artefact" class="me-2" style="width: 24px; height: 24px;">
@@ -281,9 +298,22 @@ if (isset($_SESSION['id'])) {
         <div class="col-4 d-flex flex-column">
             <div class="p-3 border foreground shadow rounded-5 h-100 overflow-auto">
                 <!-- Artefact info -->
-                <h2>Artefact Info</h2>
-                <div>
-                    
+                <div id="artefactInfoPanel">
+                    <div>
+                        <h2 id="evidenceName">EVIDENCE NAME</h2>
+                    </div>
+                    <hr>
+                    <div>
+                        <h3>Details and Metadata</h3>
+                        <br>
+                        <div class="list-group justify-content-between" id="metadataList">
+                            <div>
+                                <p class="text-muted">Key</p>
+                                <p>value</p>
+                            </div>
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
