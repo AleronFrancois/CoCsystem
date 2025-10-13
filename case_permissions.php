@@ -8,13 +8,13 @@ session_start();
     */
 require "includes/dbconn.php"; 
 
-/*if (!isset($_SESSION["user_id"])) { //if logged out 
+if (!isset($_SESSION['id'])) { //if logged out 
     header("Location: index.php");
     exit;
 }
 
-$userId = $_SESSION["user_id"]; 
-$caseId = $_SESSION["case_id"]; //current case
+$userId = $_SESSION['id']; 
+$caseId = $_GET['case_id']; //current case
 $stmt = $conn->prepare("SELECT role FROM User WHERE id = ?");
 $stmt->execute([$userId]);
 $role = $stmt->fetchColumn();
@@ -23,8 +23,7 @@ if ($role !== 'supervisor') { //ensures the user is a supervisor
     header("Location: index.php");
     exit;
 }
-*/
-$caseId = "2"; //currently hardcoded to test
+
 $stmt = $conn->prepare("SELECT `name` FROM `case` WHERE id = ?");
 $stmt->execute([$caseId]);
 $caseName = $stmt->fetchColumn();
@@ -97,7 +96,7 @@ $investigators = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <title>Manage Investigators</title>
 </head>
 <body>
-
+<?php include "components/navbar.php"?>
 <h2>Manage Investigators for Case <?php echo htmlspecialchars($caseId . " - " . $caseName); ?></h2>
 
 <h3>Add Investigator</h3>

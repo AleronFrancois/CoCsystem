@@ -291,6 +291,11 @@ if (isset($_SESSION['id'])) {
             <div class="p-3 border foreground shadow rounded-5 d-flex flex-column h-100">
                 <div class="justify-content-between d-flex">
                     <h2>[CASE]</h2>
+                    <?php if ($userRole === "supervisor"): ?>
+                        <a class="button" href="case_permissions.php?case_id=<?php echo urlencode($caseId); ?>">
+                        Manage Case Permissions
+                        </a>
+                    <?php endif; ?>
                     <img src="images/add_icon.svg" role="button" data-bs-toggle="modal" data-bs-target="#addArtefactModal">
                 </div>
                 <hr>
