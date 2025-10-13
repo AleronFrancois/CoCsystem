@@ -3,8 +3,6 @@ session_start();
 /*
     Case permission management system
     Allows supervisors to add and remove investigators on case
-    Note: Currently hardcoded for testing
-    #TODO ensure that it works without being hardcoded
     */
 require "includes/dbconn.php"; 
 
