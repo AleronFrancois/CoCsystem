@@ -117,17 +117,53 @@ if (isset($_SESSION['id'])) {
                 `Evidence`.location,
                 `Evidence`.locked,
                 `Evidence`.uploader_id,
-                GROUP_CONCAT(DISTINCT CONCAT(`Metadata`.`key`, ":", `Metadata`.`value`) SEPARATOR ",") AS metadata
+                JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        "key", `Metadata`.key,
+                        "value", `Metadata`.value
+                    )
+                ) AS metadata,
+                COALESCE((
+                    SELECT JSON_ARRAYAGG(
+                        JSON_OBJECT(
+                            "id", `Comment`.id,
+                            "timestamp", `Comment`.timestamp,
+                            "content", `Comment`.content,
+                            "commenter_id", `Comment`.commenter_id,
+                            "commenter_name", `User`.username
+                        )
+                    )
+                    FROM `Comment`
+                    JOIN `User` ON `User`.id = `Comment`.commenter_id
+                    WHERE `Comment`.evidence_id = `Evidence`.id
+                    AND `Comment`.case_id = ?
+                ), JSON_ARRAY()) AS comments
             FROM `Evidence` 
             LEFT JOIN `Case_Evidence` ON `Evidence`.`id` = `Case_Evidence`.`evidence_id` 
             LEFT JOIN `Metadata` ON `Evidence`.`id` = `Metadata`.`evidence_id`
             WHERE `Case_Evidence`.`case_id` = ? AND
-            `Evidence`.approved = "approved"
+            `Evidence`.`approved` = "approved"
             GROUP BY `Evidence`.id
             ORDER BY `Evidence`.id ASC' 
         );
-        $stmt->execute([$caseId]);
+        $stmt->execute([$caseId, $caseId]);
         $artefacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($artefacts as &$artefact) {
+            if ($artefact['metadata'] != null) {
+                $artefact['metadata'] = json_decode($artefact['metadata'], true);
+            } else {
+                $artefact['metadata'] = array();
+            }
+
+            if ($artefact['comments'] != null) {
+                $artefact['comments'] = json_decode($artefact['comments'], true);
+            } else {
+                $artefact['comments'] = array();
+            }
+        }
+        unset($artefact);
+
     }
 } else {
     header("Location: index.php");
@@ -272,7 +308,8 @@ if (isset($_SESSION['id'])) {
                             " 
                             id="artefact_' . htmlspecialchars($artefact['id']) . '"
                             onclick="handleArtefactClick(event)"
-                            data-metadata="' . $artefact['metadata'] . '"
+                            data-metadata="' . htmlspecialchars(json_encode($artefact['metadata']), ENT_QUOTES, 'UTF-8') . '"
+                            data-comments="' . htmlspecialchars(json_encode($artefact['comments']), ENT_QUOTES, 'UTF-8') . '"
                             data-name="' . htmlspecialchars($artefact['name']) . '"
                             >
                                 <div>
@@ -296,23 +333,32 @@ if (isset($_SESSION['id'])) {
             </div>
         </div>
         <div class="col-4 d-flex flex-column">
-            <div class="p-3 border foreground shadow rounded-5 h-100 overflow-auto">
-                <!-- Artefact info -->
-                <div id="artefactInfoPanel">
+            <div class="p-3 border foreground shadow rounded-5 d-flex flex-column h-100">
+                <div id="artefactInfoPanel" class="d-flex flex-column h-100 d-none">
                     <div>
                         <h2 id="evidenceName">EVIDENCE NAME</h2>
                     </div>
                     <hr>
                     <div>
-                        <h3>Details and Metadata</h3>
-                        <br>
-                        <div class="list-group justify-content-between" id="metadataList">
-                            <div>
-                                <p class="text-muted">Key</p>
-                                <p>value</p>
-                            </div>
-                            
+                        <h3 id="artefactInfoPanelTitle">Details and Metadata</h3>
+                    </div>
+                    <div class="flex-grow-1 overflow-auto my-2">
+                        <div class="list-group" id="artefactInfoList">
+                            <form method="POST" enctype="multipart/form-data" action="/handlers/handle_comment.php">
+                                <div class="mb-3">
+                                    <label for="Comment" class="form-label">Post a Comment</label>
+                                    <textarea rows="3" type="text" class="form-control" id="Comment" name="Comment" placeholder="Type your comment then press 'Enter' to post"></textarea>
+                                </div>
+                            </form>
                         </div>
+                    </div>
+                    <div class="mt-auto pt-2 border-top flex-row d-flex gap-2">
+                        <button class="btn btn-secondary w-50" id="viewCommentsButton" onclick="viewComments()">
+                            Comments
+                        </button>
+                        <button class="btn btn-primary w-50" id="viewDetailsButton" onclick="viewDetails()">
+                            Details
+                        </button>
                     </div>
                 </div>
             </div>
