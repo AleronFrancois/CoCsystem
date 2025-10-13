@@ -320,7 +320,7 @@ if (isset($_SESSION['id'])) {
                                     <button class="btn btn-sm py-0" onclick="window.open(\'/handlers/handle_artefact_download.php?artefactid=' . $artefact['id'] . '\')">
                                         <img src="images/download_icon.svg" alt="Download Artefact" style="width: 20px; height: 20px;">
                                     </button>
-                                    <button class="btn btn-sm p-0" onclick="rehashArtefact(event, ' . $artefact['id'] . ')">
+                                    <button class="btn btn-sm p-0" onclick="window.location.href=\'/handlers/handle_rehash.php?artefactid=' . $artefact['id'] . '&caseid=' . $caseId . '\'">
                                         <img src="images/rehash_icon.svg" alt="Rehash Artefact" style="width: 20px; height: 20px;">
                                     </button>
                                 </div>
