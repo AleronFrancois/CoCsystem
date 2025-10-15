@@ -172,6 +172,7 @@ if (isset($_SESSION['id'])) {
 
 ?>
 
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -182,84 +183,6 @@ if (isset($_SESSION['id'])) {
     <script src="scripts/scripts.js" defer></script>
 </head>
 
-<!--         Handles Uploading Evidence Artefact
-    Author.: Aleron Francois (691807) & ...
-    Date...: 1/10/2025 - x/x/2025
-    NOTE...: Does not yet upload evidence artefacts to the database (Only creates artefacts client-side)
-    TODO...: 1. Connect to database and upload/store evidence artefacts.
-             2. Confirm artefact creation.
-             3. Log successful artefact upload.
-             4. Load case name instead of [CASE].
--->
-<!-- <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-        // Back button loads the previous page
-        const backButton = document.getElementById("backButton");
-        backButton.addEventListener("click", () => {
-            history.back();
-        });
-
-        // Profile icon loads profile page
-        const profileButton = document.getElementById("profileButton");
-        profileButton.addEventListener("click", () => {
-            window.location.href = "profile.php";
-        });
-
-        // Gets the reference to the necessary elements 
-        const createButton = document.getElementById("createArtefactButton");
-        const artefactNameInput = document.getElementById("artefactName");
-        const artefactDescriptionInput = document.getElementById("artefactDescription");
-        const artefactList = document.querySelector("ol.list-group");
-
-        // Handles the artefact creation on button click
-        createButton.addEventListener("click", () => {
-            const artefactName = artefactNameInput.value.trim();
-
-            // Checks if artefact name is not empty and creates the artefact 
-            if (artefactName !== "") {
-                const list = document.createElement("li");
-                list.className = "list-group-item d-flex align-items-center";
-
-                // Icon details
-                const img = document.createElement("img");
-                img.src = "images/evidence.png"; 
-                img.alt = "Evidence Artefact";
-                img.className = "me-2";
-                img.style.width = "24px";
-                img.style.height = "24px";
-
-                // Adds a artefact icon, name and datetime to the evidence list
-                const span = document.createElement("span");
-                span.textContent = artefactName;
-                const timeSpan = document.createElement("small");
-                timeSpan.textContent = new Date().toLocaleString();
-                timeSpan.className = "text-muted ms-auto";
-                list.appendChild(img);
-                list.appendChild(span);
-                list.appendChild(timeSpan)
-                list.dataset.description = artefactDescriptionInput.value.trim();
-                artefactList.appendChild(list);
-
-                // Store artefact description and display artefact info on click
-                list.dataset.description = artefactDescriptionInput.value.trim();
-                list.addEventListener("click", () => {
-                    const infoPanel = document.querySelector(".col-4 div div");
-                    infoPanel.innerHTML = `
-                        <p><strong>Name:</strong> ${artefactName}</p>
-                        <p><strong>Description:</strong> ${list.dataset.description}</p>
-                        <p><strong>Created:</strong> ${timeSpan.textContent}</p>
-                    `;
-                });
-
-                // Clear text fields and close popup
-                artefactNameInput.value = "";
-                artefactDescriptionInput.value = "";
-                const modal = bootstrap.Modal.getInstance(document.getElementById("addArtefactModal"));
-                modal.hide();
-            }
-        });
-    });
-</script> -->
 
 <body class="background custom-body">
     <!-- Navigation menu -->

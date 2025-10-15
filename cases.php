@@ -1,3 +1,13 @@
+<!--    
+             === cases.php ===
+    Author.: Aleron Francois (691807) & ...
+    Date...: 1/10/2025 - x/x/2025
+    Info...: Gets cases from database and displays all cases
+             in list. Also displays case info and redirects to 
+             the cases evidence page.
+-->
+
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -8,14 +18,22 @@
 </head>
 
 
-<!--    
-             === cases.php ===
-    Author.: Aleron Francois (691807) & ...
-    Date...: 1/10/2025 - x/x/2025
-    Info...: Gets cases from database and displays all cases
-             in list. Also displays case info and redirects to 
-             the cases evidence page.
--->
+<?php
+session_start(); // Start session
+
+// Checks if the user is logged in 
+if (!isset(
+    $_SESSION["loggedin"]) || 
+    $_SESSION["loggedin"] !== true
+    ) {
+
+    // Redirect to login.php if not logged on
+    header("Location: login.php");
+    exit;
+}
+?>
+
+
 <script defer>
 document.addEventListener("DOMContentLoaded", () => {
     const profileButton = document.getElementById("profileButton");          // Profile button
@@ -34,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(res => res.text()) 
         .then(text => {
             const jsonStart = text.indexOf('[');
-            if (jsonStart === -1) throw new Error('No JSON found in response');
+            if (jsonStart === -1) throw new Error('...no JSON found');
             const cleanText = text.slice(jsonStart);
             const data = JSON.parse(cleanText);
             caseList.innerHTML = "";
@@ -44,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     
     /*
-                 === addCaseToList() ===
+                 addCaseToList()
         Info...: Creates and adds a new case to the list. Each case includes a
                  name, icon, creation date and description.
                  Sets up click event handlers.
@@ -52,7 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
         Param..: name, description, createDate, id
         Return.: none
     */
-    function addCaseToList(name, description, creationDate, id) {
+    function addCaseToList(
+        name, 
+        description, 
+        creationDate, 
+        id,
+        ) {
         const list = document.createElement("li");
         list.className = "list-group-item d-flex align-items-center";
         list.dataset.id = id;
@@ -103,7 +126,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const description = caseDescriptionInput.value.trim();
         const currentDate = new Date().toISOString();
         const tempId = Date.now();
-        addCaseToList(caseName, description, currentDate, tempId);
+
+        addCaseToList(
+            caseName, 
+            description, 
+            currentDate, 
+            tempId);
 
         // Clear modal
         caseNameInput.value = "";

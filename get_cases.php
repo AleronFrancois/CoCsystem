@@ -8,10 +8,22 @@
              file to display all cases in the list UI.
 */
 session_start(); // Start session
+
+// Checks if the user is logged in 
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    // Redirect to login.php if not logged on
+    header("Location: login.php");
+    exit;
+}
+
 include 'includes/dbconn.php'; // Connect to database
 header('Content-Type: application/json'); // Set content type to JSON
 
-if (isset($_GET['action']) && $_GET['action'] == 'get_cases') {
+if (isset(
+    $_GET['action']) && 
+    $_GET['action'] == 
+    'get_cases'
+    ) {
 
     // Gets all cases with corresponding creator
     $sql = "
@@ -25,6 +37,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'get_cases') {
         JOIN `USER` AS U ON C.creator_id = U.id
         ORDER BY C.creation_date DESC
     ";
+    
     $stmt = $conn->query($sql); // Exec sql query
 
     // Fetch all results & convert to json
