@@ -18,6 +18,9 @@
                     <a class="nav-link" href="info.html">Info</a>
                 </li>
             </ul>
-            <img src="images/account_icon.svg" role="button" id="profileButton">
+            <a href="../profile.php">
+                <img src="images/account_icon.svg" role="button" id="profileButton">
+            </a>
         </div>
     </nav>
+

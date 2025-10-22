@@ -186,25 +186,8 @@ if (isset($_SESSION['id'])) {
 
 <body class="background custom-body">
     <!-- Navigation menu -->
-    <nav class="navbar custom-navbar accent">
-        <div class="custom-container">
-            <img src="images/back_icon.png" class="back-icon" role="button" id="backButton">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active">Cases</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link">Review Evidence</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link">User Panel</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="info.html">Info</a>
-                </li>
-            </ul>
-            <img src="images/account_icon.svg" role="button" id="profileButton">
-        </div>
+    <nav>
+        <?php include "components/navbar.php"; ?>
     </nav>
 
     
