@@ -15,6 +15,9 @@
                     <a class="nav-link" href="user_panel.php">User Panel</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="custodylog.php">Generate Custody Log</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="info.html">Info</a>
                 </li>
             </ul>

@@ -142,3 +142,31 @@ window.onload = function() {
 
 
 }
+//For custody log 
+function toggleupdate(type) {
+    const caseSelector = document.getElementById('case-selector');
+    const evidenceSelector = document.getElementById('evidence-selector');
+
+    if (type === 'case') {
+        caseSelector.style.display = 'block';
+        evidenceSelector.style.display = 'none';
+    } else {
+        caseSelector.style.display = 'none';
+        evidenceSelector.style.display = 'block';
+    }
+}
+//for custody log
+function getid() {
+    // Check which toggle is selected
+    const type = document.querySelector('input[name="type"]:checked')?.value?.toLowerCase();
+    let id = '';
+
+    if (type === 'case') {
+        // Get the ID from the text box or dropdown
+        id = document.getElementById('caseIdInput').value || document.getElementById('caseSelect').value;
+    } else if (type === 'evidence') {
+        id = document.getElementById('evidenceIdInput').value || document.getElementById('evidenceSelect').value;
+    }
+
+    return id;
+}

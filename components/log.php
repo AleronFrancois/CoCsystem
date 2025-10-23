@@ -1,5 +1,5 @@
 <!-- Log.php -->
-<!-- Used to get the custody logs of evidence and cases -->
+<!-- Used to generate the custody logs of evidence and cases -->
 <!-- Required inputs: type of evidence, id -->
 <?php 
 require "../includes/dbconn.php"; 
