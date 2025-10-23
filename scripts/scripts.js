@@ -54,9 +54,12 @@ function viewComments() {
         </div>
         `
     });
-
-    
 }
+function viewLog(type,id) {
+    const url = `components/Log.php?type=${type}&id=${id}`;
+    window.open(url, '_blank'); // opens in new tab
+}    
+
 
 function viewDetails() {
     const listItem = getSelectedListItem();

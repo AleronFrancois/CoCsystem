@@ -263,9 +263,12 @@ if (isset($_SESSION['id'])) {
                             </form>
                         </div>
                     </div>
-                    <div class="mt-auto pt-2 border-top flex-row d-flex gap-2">
+                    <div class="mt-auto pt-3 border-top d-flex gap-2">
                         <button class="btn btn-secondary w-50" id="viewCommentsButton" onclick="viewComments()">
                             Comments
+                        </button>
+                        <button class="btn btn-secondary w-50" id="viewLogButton" onclick="viewLog('evidence',artefactId)">
+                            View Custody Log
                         </button>
                         <button class="btn btn-primary w-50" id="viewDetailsButton" onclick="viewDetails()">
                             Details
