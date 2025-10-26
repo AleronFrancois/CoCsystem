@@ -218,8 +218,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         Manage Case Permissions
                         </a>
                     <?php endif; ?>
-                    <button class="btn btn-sm py-0 btn-primary" onclick="handleDownload('/handlers/handle_artefact_download.php?caseId=<?= $caseId ?>')">
-                        Download CoC
+                    <button class="btn btn-sm py-0 btn-primary" onclick="handleDownload('/handlers/handle_coc_download.php?caseId=<?= $caseId ?>')">
+                        Download html CoC
                     </button>
                     <img src="images/add_icon.svg" role="button" data-bs-toggle="modal" data-bs-target="#addArtefactModal">
                 </div>
