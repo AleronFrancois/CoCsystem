@@ -48,11 +48,13 @@ CREATE TABLE `Metadata` (
 CREATE TABLE `CaseCustodyAction` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `timestamp` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-  `action` ENUM('create', 'close', 'reopen', 'assign', 'unassign') NOT NULL,
+  `action` ENUM('create', 'close', 'reopen', 'assign_user', 'unassign_user', 'assign_evidence', 'unassign_evidence') NOT NULL,
   `user_id` INT NOT NULL,
   `case_id` INT NOT NULL,
+  `evidence_id` INT NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `User`(`id`),
-  FOREIGN KEY (`case_id`) REFERENCES `Case`(`id`)
+  FOREIGN KEY (`case_id`) REFERENCES `Case`(`id`),
+  FOREIGN KEY (`evidence_id`) REFERENCES `Evidence`(`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `Case_User` (

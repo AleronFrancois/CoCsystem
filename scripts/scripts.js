@@ -60,8 +60,28 @@ function viewLog(type,id) {
     window.open(url, '_blank'); // opens in new tab
 }    
 
+function viewCaseDetails(event) {
+    const listItem = event.target;
+    const id = listItem.getAttribute("data-id");
+    const name = listItem.getAttribute("data-name");
+    const description = listItem.getAttribute("data-description");
+    const creationDate = listItem.getAttribute("data-creationDate");
+    const caseInfoPanel = document.getElementById("caseInfoPanel")
 
-function viewDetails() {
+    caseInfoPanel.innerHTML = `
+        <div>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Description:</strong> ${description}</p>
+            <p><strong>Created:</strong> ${new Date(creationDate).toLocaleString()}</p>
+        </div>
+        <div>
+            <a class="btn btn-primary w-100" href="/artefacts.php?caseid=${id}">View case</a>
+        </div>
+        `
+}
+
+
+function viewEvidenceDetails() {
     const listItem = getSelectedListItem();
     const artefactInfoPanelTitle = document.getElementById('artefactInfoPanelTitle');
     const commentButton = document.getElementById('viewCommentsButton');
@@ -169,4 +189,13 @@ function getid() {
     }
 
     return id;
+}
+
+function handleDownload(url) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
