@@ -1,13 +1,22 @@
 <?php
 session_start();
 require "../includes/dbconn.php"; 
+require '../vendor/autoload.php';
 
-if (!isset($_SESSION["id"]) || !isset($_GET["caseId"])) {
+use Dompdf\Dompdf;
+
+if (!isset($_SESSION["id"]) || !isset($_GET["caseId"]) || !isset($_GET['fileFormat'])) {
     header("Location: /index.php");
     exit;
 }
 
 $caseId= $_GET["caseId"];
+$fileFormat = $_GET['fileFormat'];
+
+if ($_GET['fileFormat'] !== 'pdf' && $_GET['fileFormat'] !== 'html') {
+    header("Location: /index.php");
+    exit;
+}
 
 // Get case information
 $stmt = $conn->prepare('
@@ -105,17 +114,13 @@ usort($chainOfCustody, function ($a, $b) {
     return strtotime($a['timestamp']) <=> strtotime($b['timestamp']);
 });
 
-// Format the CoC
-header('Content-Type: text/html');
-header('Content-Disposition: attachment; filename="Chain_Of_Custody_' . $caseId . '.html"');
-header('Cache-Control: no-cache, must-revalidate');
-header('Expires: 0');
+ob_start();
+?>
 
-echo '
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Chain of Custody Report: Case ' . $caseId . ' - ' . $caseInfo['name'] . '</title>
+        <title>Chain of Custody Report: Case <?= $caseId . ' - ' . $caseInfo['name'] ?></title>
         <style>
             body {
                 font-family: Arial;
@@ -127,7 +132,8 @@ echo '
                 width: 100%;
                 margin-top: 20px;
                 background: #fff;
-                overflow-x: scroll
+                table-layout: fixed;       
+                word-wrap: break-word; 
             }
 
             th, td {
@@ -150,10 +156,10 @@ echo '
         </style>
     </head>
     <body>
-        <h1>Chain of custody report for: ' . $caseInfo['name'] .'</h1>
-        <p>Case opened: ' . date('Y-m-d g:i:s A', strtotime($caseInfo['creation_date'])) . '</p>
-        <p>Case description: ' . $caseInfo['description'] . '</p>
-        <p>Case creator: ' . $caseInfo['username'] . '</p>
+        <h1>Chain of custody report for: <?= $caseInfo['name'] ?></h1>
+        <p>Case opened: <?= date('Y-m-d g:i:s A', strtotime($caseInfo['creation_date'])) ?></p>
+        <p>Case description: <?= $caseInfo['description'] ?></p>
+        <p>Case creator: <?= $caseInfo['username'] ?></p>
         <div id="tableContainer">
             <table>
                 <tr>
@@ -167,7 +173,7 @@ echo '
                     <th>Evidence Hash</th>
                     <th>Hash Match?</th>
                 </tr>
-                ';
+                <?php
                 $currentEvidenceHashes = array();
                 foreach ($chainOfCustody as $action) {
                     $isEvidenceAction = isset($action['evidence_hash']);
@@ -196,12 +202,31 @@ echo '
                     </tr>
                     ';
                 }
-                echo '
+                ?>
             </table>
         </div>
     </body>
 </html>
-'
+
+<?php
+
+$htmlCoC = ob_get_clean();
+
+if ($fileFormat === 'html') {
+    header('Content-Type: text/html');
+    header('Content-Disposition: attachment; filename="Chain_Of_Custody_' . $caseId . '.html"');
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Expires: 0');
+    echo $htmlCoC;
+} else {
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml($htmlCoC);
+    $dompdf->setPaper('A4', 'landscape');
+    $dompdf->render();
+    $dompdf->stream('Chain_Of_Custody_' . $caseId . '.pdf', ['Attachment' => true]);
+}
+
+
 
 
 ?>
