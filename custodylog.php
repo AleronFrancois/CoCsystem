@@ -12,13 +12,14 @@ $cases = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles/styles.css">
-    <script src="scripts/scripts.js"></script>
     <title>Chain of custody generator</title>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="scripts/bootstrap.bundle.min.js" defer></script>
+    <script src="scripts/scripts.js" defer></script>
+   
 </head>
-<navbar>
-    <?php include "components/navbar.php"?>
-</navbar>
+<?php include "components/navbar.php"; ?>
 <div class ="clog-container">
     <div class="toggle-group">
         <input type="radio" id="case" name="type" value="Case" onchange="toggleupdate('case')">

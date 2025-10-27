@@ -36,8 +36,12 @@ $pending = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles/styles.css">
     <title>Evidence Approval</title>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="scripts/bootstrap.bundle.min.js" defer></script>
+    <script src="scripts/scripts.js" defer></script>
+    
 </head>
     <body>
         <?php include "components/navbar.php"?>

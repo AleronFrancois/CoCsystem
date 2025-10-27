@@ -35,10 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles/styles.css">
     <title>Add Investigator</title>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="scripts/bootstrap.bundle.min.js" defer></script>
+    <script src="scripts/scripts.js" defer></script>
 </head>
 <body>
+    <?php include "components/navbar.php"; ?>
     <h1>Add a new Investigator</h1>
 
     <form name="addUserForm" id="newUserForm" method="Post" novalidate>

@@ -202,10 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body class="background custom-body">
     <!-- Navigation menu -->
-    <nav>
-        <?php include "components/navbar.php"; ?>
-    </nav>
-
+    <?php include "components/navbar.php"; ?>
     
     <!-- Artefacts and Info Box -->
     <div class="d-flex flex-grow-1 p-4 overflow-hidden">

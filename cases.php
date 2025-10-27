@@ -100,25 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body class="background custom-body">
     <!-- Navigation menu -->
-    <nav class="navbar custom-navbar accent">
-        <div class="custom-container">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active">Cases</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="evidence_approval.php">Review Evidence</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="user_panel.php">User Panel</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="info.html">Info</a>
-                </li>
-            </ul>
-            <img src="images/account_icon.svg" role="button" id="profileButton">
-        </div>
-    </nav>
+    <?php include "components/navbar.php"; ?>
     
     <!-- Cases and Info Box -->
     <div class="d-flex flex-grow-1 p-4 overflow-hidden">
