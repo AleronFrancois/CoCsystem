@@ -89,74 +89,77 @@ $investigators = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Manage Investigators</title>
-</head>
-<body>
-<?php include "components/navbar.php"?>
-<h2>Manage Investigators for Case <?php echo htmlspecialchars($caseId . " - " . $caseName); ?></h2>
+    <head>
+        <meta charset="UTF-8">
+        <title>Manage Investigators</title>
+        <link rel="stylesheet" href="styles/bootstrap.min.css">
+        <link rel="stylesheet" href="styles/styles.css">
+        <script src="scripts/bootstrap.bundle.min.js" defer></script>
+        <script src="scripts/scripts.js" defer></script>
+    </head>
+    <body>
+    <?php include "components/navbar.php"?>
+   <div class="p-3 border foreground shadow rounded-5 m-auto mt-5 w-50">
+     <h2>Manage Investigators for Case <?php echo htmlspecialchars($caseId . " - " . $caseName); ?></h2>
 
-<h3>Add Investigator</h3>
-<form id="addForm" method="POST">
-    <label for="add_user_id">User ID:</label>
-    <input type="text" id="add_user_id" name="add_user_id" required>
-    <input type="hidden" id="confirmed" name="confirmed" value="">
-    <button type="submit">Add to Case</button>
-    <div id="confirmSpace"></div>
-</form>
+    <h3>Add Investigator</h3>
+    <form id="addForm" method="POST">
+        <label for="add_user_id">User ID:</label>
+        <input type="text" id="add_user_id" name="add_user_id" class="form-control w-25 mb-2" required>
+        <input type="hidden" id="confirmed" name="confirmed" value="">
+        <button class="btn btn-primary mb-3" type="submit">Add to Case</button>
+        <div id="confirmSpace"></div>
+    </form>
 
-<?php if ($message) echo "<p>$message</p>"; ?>
+    <?php if ($message) echo "<p>$message</p>"; ?>
 
-<script>
-document.getElementById('addForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // stop default submit
+    <script>
+    document.getElementById('addForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // stop default submit
 
-    const form = this;
-    const userIdInput = document.getElementById('add_user_id').value.trim();
-    if (!userIdInput) return;
-    //double check
-    document.getElementById('confirmSpace').innerHTML = `
-        <p>Are you sure you want to add User ID <b>${userIdInput}</b> to the case?</p>
-        <button type="button" id="confirmYes">Yes</button>
-        <button type="button" id="confirmNo">No</button>
-    `;
-    //if yes clicked
-    document.getElementById("confirmYes").onclick = () => {
-        document.getElementById('confirmed').value = 'yes';
-        form.submit();
-    };
-    //if no clicked
-    document.getElementById("confirmNo").onclick = () => {
-        document.getElementById('confirmSpace').innerHTML = "";
-    };
-});
-</script>
+        const form = this;
+        const userIdInput = document.getElementById('add_user_id').value.trim();
+        if (!userIdInput) return;
+        //double check
+        document.getElementById('confirmSpace').innerHTML = `
+            <p>Are you sure you want to add User ID <b>${userIdInput}</b> to the case?</p>
+            <button type="button" id="confirmYes" class="btn btn-success mb-3">Yes</button>
+            <button type="button" id="confirmNo" class="btn btn-danger mb-3">No</button>
+        `;
+        //if yes clicked
+        document.getElementById("confirmYes").onclick = () => {
+            document.getElementById('confirmed').value = 'yes';
+            form.submit();
+        };
+        //if no clicked
+        document.getElementById("confirmNo").onclick = () => {
+            document.getElementById('confirmSpace').innerHTML = "";
+        };
+    });
+    </script>
+        <h3>Investigators on Case</h3>
+        <table>
+            <tr>
+                <th>Investigator Name</th>
+                <th>Investigator ID</th>
+                <th>Action</th>
+            </tr>
+            <!-- creates the table of investigators on case -->
+            <?php foreach ($investigators as $inv): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($inv['username']); ?></td>
+                <td><?php echo $inv['id']?></td>
+                <td>
+                    <form method="POST" onsubmit="return confirm('Remove <?php echo ($inv['username']); ?> from this case?');">
+                        <input class="form-control" type="hidden" name="remove_user_id" value="<?php echo $inv['id']; ?>">
+                        <button class="btn btn-primary" type="submit">Remove Investigator</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    
 
-
-
-
-<h3>Investigators on Case</h3>
-<table border=1>
-    <tr>
-        <th>Investigator Name</th>
-        <th>Investigator ID</th>
-        <th>Action</th>
-    </tr>
-    <!-- creates the table of investigators on case -->
-    <?php foreach ($investigators as $inv): ?>
-    <tr>
-        <td><?php echo htmlspecialchars($inv['username']); ?></td>
-        <td><?php echo $inv['id']?></td>
-        <td>
-            <form method="POST" onsubmit="return confirm('Remove <?php echo ($inv['username']); ?> from this case?');">
-                <input type="hidden" name="remove_user_id" value="<?php echo $inv['id']; ?>">
-                <button type="submit">Remove Investigator</button>
-            </form>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-</table>
-
-</body>
+    </body>
 </html>

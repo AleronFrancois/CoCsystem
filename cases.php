@@ -89,9 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             `Case`.description,
             `Case`.creator_id
         FROM `Case`
+        INNER JOIN `Case_User` ON `Case`.id = `Case_User`.case_id
+        WHERE `Case_User`.user_id = ?
         ORDER BY `Case`.id DESC
     ');
-    $stmt->execute();
+    $stmt->execute([$_SESSION["id"]]);
     $cases = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
