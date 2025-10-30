@@ -4,15 +4,19 @@ session_start();
 $role = $_SESSION['role'];
 $username = $_SESSION['username'];
 $id = $_SESSION['id'];
+$page = basename($_SERVER['PHP_SELF']);
+
 ?>
-<nav class="navbar navbar-expand accent navbar-dark">
+<nav class="navbar navbar-expand accent navbar-dark sticky-top">
     <div class="container-fluid ">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <a class="nav-link" href="cases.php">Cases</a>
-            <a class="nav-link" href="evidence_approval.php">Review Evidence</a>
-            <a class="nav-link" href="user_panel.php">User Panel</a>
-            <a class="nav-link" href="custodylog.php">View Custody Logs</a>
-            <a class="nav-link" href="info.html">Info</a>
+            <a class="nav-link <?= $page == 'cases.php' ? 'active' : '' ?>" href="cases.php">Cases</a>
+            <?php if($role == 'supervisor'): ?>
+            <a class="nav-link <?= $page == 'evidence_approval.php' ? 'active' : '' ?>" href="evidence_approval.php">Review Evidence</a>
+            <a class="nav-link <?= $page == 'user_panel.php' ? 'active' : '' ?>" href="user_panel.php">User Panel</a>
+            <?php endif; ?>
+            <a class="nav-link <?= $page == 'custodylog.php' ? 'active' : '' ?>" href="custodylog.php">View Custody Logs</a>
+            <a class="nav-link <?= $page == 'info.php' ? 'active' : '' ?>" href="info.php">Info</a>
         </ul>
         <div class="dropdown">
             <a 

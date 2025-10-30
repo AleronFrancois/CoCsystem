@@ -215,18 +215,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="p-3 border foreground shadow rounded-5 d-flex flex-column h-100">
                 <div class="justify-content-between d-flex">
                     <h2><?= $artefacts[0]['case_name'] ?></h2>
-                    <?php if ($userRole === "supervisor"): ?>
-                        <a class="button" href="case_permissions.php?case_id=<?php echo urlencode($caseId); ?>">
-                        Manage Case Permissions
+                    <div class="d-flex flex-row">
+                        <?php if ($userRole === "supervisor"): ?>
+                            <a 
+                                class="outerIcon d-flex align-items-center justify-content-center rounded-circle btn btn-primary"
+                                href="case_permissions.php?case_id=<?php echo urlencode($caseId); ?>"
+                                title="Manage User Permissions"
+                            >
+                                <img src="images/permissions_icon.svg" class="icon">
+                            </a>
+                        <?php endif; ?>
+                        <a 
+                            class="outerIcon d-flex align-items-center justify-content-center rounded-circle btn btn-primary"
+                            onclick="handleDownload('/handlers/handle_coc_download.php?fileFormat=pdf&caseId=<?= $caseId ?>')"
+                            title="Download CoC as a PDF Document"
+                        >
+                            <img src="images/pdf_icon.svg" class="icon">
                         </a>
-                    <?php endif; ?>
-                    <button class="btn btn-sm py-0 btn-primary" onclick="handleDownload('/handlers/handle_coc_download.php?fileFormat=pdf&caseId=<?= $caseId ?>')">
-                        Download PDF CoC
-                    </button>
-                    <button class="btn btn-sm py-0 btn-primary" onclick="handleDownload('/handlers/handle_coc_download.php?fileFormat=html&caseId=<?= $caseId ?>')">
-                        Download HTML CoC
-                    </button>
-                    <img src="images/add_icon.svg" role="button" data-bs-toggle="modal" data-bs-target="#addArtefactModal">
+                        <a 
+                            class="outerIcon d-flex align-items-center justify-content-center rounded-circle btn btn-primary"
+                            onclick="handleDownload('/handlers/handle_coc_download.php?fileFormat=html&caseId=<?= $caseId ?>')"
+                            title="Download CoC as a HTML Document"
+                        >
+                            <img src="images/html_icon.svg" class="icon">
+                        </a>
+                        <a 
+                            class="outerIcon d-flex align-items-center justify-content-center rounded-circle btn btn-primary"
+                            role="button" data-bs-toggle="modal" data-bs-target="#addArtefactModal"
+                            title="Add new evidence"
+                        >
+                            <img src="images/add_icon.svg" class="icon">
+                        </a>
+                        
+                    </div>
                 </div>
                 <hr>
                 <!-- list of Artefacts -->
