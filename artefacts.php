@@ -5,6 +5,11 @@ require "includes/metadata_extractor.php";
 
 session_start();
 
+if (!isset($_GET['caseid'])) {
+    header("Location: cases.php");
+    exit;
+}
+
 $caseId = $_GET['caseid'];
 $userId = null;
 $userRole = null;
