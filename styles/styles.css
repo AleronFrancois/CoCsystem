@@ -95,6 +95,18 @@
     overflow-wrap: break-word;
     max-width: 100%;      
 }
+
+.icon {
+    width: 25px;
+    height: 25px;
+    fill: white
+}
+.outerIcon {
+    width:40px;
+    height:40px
+}
+
+
 button[value="reject"]:hover {
     background-color: #dc2417; 
 }

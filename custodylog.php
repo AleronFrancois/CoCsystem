@@ -1,13 +1,34 @@
 <!---Custody Log-->
 <!---Used to select which case or evidence a user wants to view the logs for --> 
-<?php 
+<?php
+session_start(); 
 require "includes/dbconn.php";
-$stmt = $conn->prepare("Select name, id from evidence");
-$stmt->execute();
+
+if (!isset($_SESSION["id"])) {
+    // Redirect to login.php if not logged on
+    header("Location: login.php");
+    exit;
+}
+
+$stmt = $conn->prepare("
+    SELECT 
+        name, 
+        id 
+    FROM `evidence` 
+    INNER JOIN `Case_Evidence` ON `Case_Evidence`.evidence_id = `Evidence`.id
+    INNER JOIN `Case_User` ON `Case_User`.case_id = `Case_Evidence`.case_id
+    WHERE `Case_User`.user_id = ?");
+$stmt->execute([$_SESSION['id']]);
 $evidence = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $conn->prepare("Select name, id from `case`");
-$stmt->execute();
+$stmt = $conn->prepare("
+    SELECT 
+        name, 
+        id 
+    FROM `case` 
+    INNER JOIN `Case_User` ON `Case`.id = `Case_User`.case_id
+    WHERE `Case_User`.user_id = ?");
+$stmt->execute([$_SESSION['id']]);
 $cases = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <head>
@@ -59,5 +80,6 @@ $cases = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </select>
         <button class="btn" onclick="viewLog('evidence',getid())">Submit</button>
     </div>
+    <p class="text-muted fs-6">For a full case custody log, access the case first via the 'cases' page.</p>
 </div>
 

@@ -40,6 +40,7 @@ try {
     $blobClient = BlobRestProxy::createBlobService($_ENV['BLOB_CONNECTION_STRING']);
     $evidenceBlob = $blobClient->getBlob('evidence', $location);
 
+    // Using the helper function here just increases overheads, so it is not necessary here.
     $fileHash = hash('sha256', stream_get_contents($evidenceBlob->getContentStream(), -1, 0));
 
     $stmt = $conn->prepare('INSERT INTO `EvidenceCustodyAction` (`action`, `description`, `evidence_hash`, `user_id`, `evidence_id`) VALUES (?, ?, ?, ?, ?)');

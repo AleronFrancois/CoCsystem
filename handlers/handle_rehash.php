@@ -1,8 +1,7 @@
 <?php
 require '../includes/dbconn.php';
 require '../vendor/autoload.php';
-
-use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+require '../includes/evidence_hash_retriever.php';
 
 session_start();
 
@@ -42,10 +41,7 @@ try {
     $location = $result['location'];
     $latestHash = $result['latest_hash'];
 
-    $blobClient = BlobRestProxy::createBlobService($_ENV['BLOB_CONNECTION_STRING']);
-    $evidenceBlob = $blobClient->getBlob('evidence', $location);
-
-    $fileHash = hash('sha256', stream_get_contents($evidenceBlob->getContentStream(), -1, 0));
+    $fileHash = getEvidenceHash($artefactId, $location);
 
 
     $stmt = $conn->prepare("INSERT INTO `EvidenceCustodyAction` (`action`, `description`, `evidence_hash`, `user_id`, `evidence_id`) VALUES (?, ?, ?, ?, ?)");

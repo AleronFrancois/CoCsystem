@@ -17,7 +17,7 @@ if ($role !== 'supervisor') { //checks user is a supervisor
 }
   
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['newUsername']);
+    $username = htmlspecialchars(trim($_POST['newUsername']));
     $password = $_POST['newPassword'];
     
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -43,17 +43,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <?php include "components/navbar.php"; ?>
-    <h1>Add a new Investigator</h1>
+    <div class="p-3 border foreground shadow rounded-5 m-auto mt-5 w-50">
+        <h1>Add a New Investigator</h1>
 
-    <form name="addUserForm" id="newUserForm" method="Post" novalidate>
-        <label for="newUsername">Username:</label>
-        <input type="text" id="newUsername" name="newUsername" value = "" required>
+        <form name="addUserForm" id="newUserForm" method="Post" novalidate>
+            <label for="newUsername">Username:</label>
+            <input type="text" id="newUsername" name="newUsername" class="form-control" value = "" required>
 
-        <label for="newPassword">Password:</label>
-        <input type="password" id="newPassword" name="newPassword" value = "" required>
+            <label for="newPassword">Password:</label>
+            <input type="password" id="newPassword" name="newPassword" class="form-control" value = "" required>
 
-        <button type="submit">Submit</button>
-    </form>
+            <button class="btn btn-primary mt-3" type="submit">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
 

@@ -24,9 +24,11 @@ $stmt = $conn->prepare("
         e.name,
         e.location,
         e.uploader_id,
-        u.username AS uploader_name
+        u.username AS uploader_name,
+        c.content AS comment
     FROM evidence e
     JOIN User u ON e.uploader_id = u.id
+    LEFT JOIN `Comment` c ON c.evidence_id = e.id
     WHERE e.approved = 'pending'
 ");
 $stmt->execute();
@@ -56,10 +58,11 @@ $pending = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <h2><?php echo htmlspecialchars($case['name']); ?></h2>
                     <p>Location: <?php echo htmlspecialchars($case['location']); ?></p>
                     <p>Uploaded by: <?php echo htmlspecialchars($case['uploader_name']); ?></p>
+                    <?= (isset($case['comment']) ? '<p>Comment: ' . $case['comment'] . '/<p>' : '') ?>
                     <form action="includes/process_approval.php" method="POST">
                         <input type="hidden" name="evidence_id" value="<?php echo $case['id']; ?>">
-                        <button type="submit" name="action" value="approve">Approve</button>
-                        <button type="submit" name="action" value="reject">Reject</button>
+                        <button class="btn btn-success" type="submit" name="action" value="approve">Approve</button>
+                        <button class="btn btn-danger" type="submit" name="action" value="reject">Reject</button>
                     </form>
                 </div>
             <?php endforeach; ?>
