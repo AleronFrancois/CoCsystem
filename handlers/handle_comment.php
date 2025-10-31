@@ -12,10 +12,10 @@ if (!isset($_SESSION["id"]) || !isset($_POST["artefactId"]) || !isset($_POST["ca
     exit;
 }
 
-$comment = htmlspecialchars($_POST["comment"]);
-$userId = htmlspecialchars($_SESSION["id"]);
-$artefactId = htmlspecialchars($_POST["artefactId"]);
-$caseId = htmlspecialchars($_POST["caseId"]);
+$comment = htmlspecialchars(trim($_POST["comment"]));
+$userId = $_SESSION["id"];
+$artefactId = $_POST["artefactId"];
+$caseId = $_POST["caseId"];
 
 // See if user has permission to comment on evidence
 $stmt = $conn->prepare("SELECT * FROM `Case_User` WHERE `user_id` = ? AND `case_id` = ?");

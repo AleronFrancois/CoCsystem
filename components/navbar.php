@@ -14,9 +14,10 @@ $page = basename($_SERVER['PHP_SELF']);
             <?php if($role == 'supervisor'): ?>
             <a class="nav-link <?= $page == 'evidence_approval.php' ? 'active' : '' ?>" href="evidence_approval.php">Review Evidence</a>
             <a class="nav-link <?= $page == 'user_panel.php' ? 'active' : '' ?>" href="user_panel.php">User Panel</a>
+            <a class="nav-link <?= $page == 'handle_evidence.php' ? 'active' : '' ?>" href="handle_evidence.php">Assign Evidence</a>
             <?php endif; ?>
             <a class="nav-link <?= $page == 'custodylog.php' ? 'active' : '' ?>" href="custodylog.php">View Custody Logs</a>
-            <a class="nav-link <?= $page == 'info.php' ? 'active' : '' ?>" href="info.php">Info</a>
+            <a class="nav-link <?= $page == 'info.html' ? 'active' : '' ?>" href="info.html">Info</a>
         </ul>
         <div class="dropdown">
             <a 

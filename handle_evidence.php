@@ -96,53 +96,58 @@ $cases = $conn->query("
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Evidence Transfer</title>
-    <link rel="stylesheet" href="styles/styles.css">
-</head>
-<body>
-<div class="container">
-    <h2>Evidence Transfer (Supervisors Only)</h2>
+    <head>
+        <meta charset="UTF-8">
+        <title>Evidence Transfer</title>
+        <link rel="stylesheet" href="styles/bootstrap.min.css">
+        <link rel="stylesheet" href="styles/styles.css">
+        <script src="scripts/bootstrap.bundle.min.js" defer></script>
+        <script src="scripts/scripts.js" defer></script>
+    </head>
+    <body>
+        <?php include "components/navbar.php"; ?>
+        <div class="container">
+            <h2>Evidence Transfer (Supervisors Only)</h2>
 
-    <?php if (isset($_SESSION["success"])): ?>
-        <p class="success"><?= htmlspecialchars($_SESSION["success"]) ?></p>
-        <?php unset($_SESSION["success"]); ?>
-    <?php endif; ?>
+            <?php if (isset($_SESSION["success"])): ?>
+                <p class="success"><?= htmlspecialchars($_SESSION["success"]) ?></p>
+                <?php unset($_SESSION["success"]); ?>
+            <?php endif; ?>
 
-    <?php foreach ($evidenceList as $e): ?>
-        <?php
-        $stmt = $conn->prepare("
-            SELECT c.id, c.name 
-            FROM Case_Evidence ce 
-            JOIN `Case` c ON ce.case_id = c.id 
-            WHERE ce.evidence_id = ?
-        ");
-        $stmt->execute([$e["id"]]);
-        $assignedCases = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $assignedIds = array_column($assignedCases, "id");
-        ?>
-        <div class="evidence-block">
-            <h3><?= htmlspecialchars($e["name"]) ?> (ID: <?= $e["id"] ?>)</h3>
-            <p>Location: <?= htmlspecialchars($e["location"]) ?></p>
-            <p>Status: <?= htmlspecialchars($e["approved"]) ?></p>
+            <?php foreach ($evidenceList as $e): ?>
+                <?php
+                $stmt = $conn->prepare("
+                    SELECT c.id, c.name 
+                    FROM Case_Evidence ce 
+                    JOIN `Case` c ON ce.case_id = c.id 
+                    WHERE ce.evidence_id = ?
+                ");
+                $stmt->execute([$e["id"]]);
+                $assignedCases = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $assignedIds = array_column($assignedCases, "id");
+                ?>
+                <div class="evidence-block">
+                    <h3><?= htmlspecialchars($e["name"]) ?> (ID: <?= $e["id"] ?>)</h3>
+                    <p>Location: <?= htmlspecialchars($e["location"]) ?></p>
+                    <p>Status: <?= htmlspecialchars($e["approved"]) ?></p>
 
-            <form method="POST">
-                <input type="hidden" name="evidence_id" value="<?= $e["id"] ?>">
-                <?php foreach ($cases as $case): ?>
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            name="case_ids[]" 
-                            value="<?= $case["id"] ?>" 
-                            <?= in_array($case["id"], $assignedIds) ? "checked" : "" ?>>
-                        <?= htmlspecialchars($case["name"]) ?>
-                    </label><br>
-                <?php endforeach; ?>
-                <button type="submit">Update</button>
-            </form>
+                    <form method="POST">
+                        <input type="hidden" name="evidence_id" value="<?= $e["id"] ?>">
+                        <?php foreach ($cases as $case): ?>
+                            <label>
+                                <input 
+                                    class="form-check-input"
+                                    type="checkbox" 
+                                    name="case_ids[]" 
+                                    value="<?= $case["id"] ?>" 
+                                    <?= in_array($case["id"], $assignedIds) ? "checked" : "" ?>>
+                                <?= htmlspecialchars($case["name"]) ?>
+                            </label><br>
+                        <?php endforeach; ?>
+                        <button class="btn btn-primary" type="submit">Update</button>
+                    </form>
+                </div>
+            <?php endforeach; ?>
         </div>
-    <?php endforeach; ?>
-</div>
-</body>
+    </body>
 </html>

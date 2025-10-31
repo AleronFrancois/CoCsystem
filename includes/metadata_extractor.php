@@ -1,4 +1,6 @@
 <?php
+// Note: While users could potentially hide XSS elements in metadata, applying htmlspecialchars() or trim() to
+// pieces of evidence will harm the forensic integrity of the evidence. So these protections cannot be applied here.
 
 use Smalot\PdfParser\Parser;
 use getID3;

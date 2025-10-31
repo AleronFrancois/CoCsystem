@@ -46,9 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="p-3 border foreground shadow rounded-5 m-auto mt-5 w-50">
         <h1>Add a New Investigator</h1>
 
-        <form name="addUserForm" id="newUserForm" method="Post" novalidate>
+        <form name="addUserForm" id="newUserForm" method="post">
             <label for="newUsername">Username:</label>
-            <input type="text" id="newUsername" name="newUsername" class="form-control" value = "" required>
+            <input 
+                pattern="^[a-zA-Z0-9]+$"
+                type="text"
+                id="newUsername"
+                title="Only letters, numbers, underscores, periods, and hyphens allowed."
+                name="newUsername"
+                class="form-control"
+                value = "" 
+                required
+            >
 
             <label for="newPassword">Password:</label>
             <input type="password" id="newPassword" name="newPassword" class="form-control" value = "" required>

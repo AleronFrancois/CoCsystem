@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $metadata = extract_metadata_values($_FILES['artefactFile']);
 
         // Insert evidence into database
-        $evidenceName = $_POST['artefactName'];
+        $evidenceName = htmlspecialchars(trim($_POST['artefactName']));
         
         if ($userRole == 'supervisor') {
             $stmt = $conn->prepare("INSERT INTO `Evidence` (`name`, `location`, `uploader_id`, `approved`) VALUES (?, ?, ?, 'approved')");
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['artefactComment']) && trim($_POST['artefactComment']) != "") {
             $comment = true;
             $stmt = $conn->prepare('INSERT INTO `Comment` (`content`, `commenter_id`, `case_id`, `evidence_id`) VALUES (?, ?, ?, ?)');
-            $stmt->execute([trim($_POST['artefactComment']), $userId, $caseId, $evidenceId]);
+            $stmt->execute([htmlspecialchars(trim($_POST['artefactComment'])), $userId, $caseId, $evidenceId]);
         }
 
         // Link evidence to case
