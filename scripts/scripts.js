@@ -1,8 +1,15 @@
 function redirectAfterDelay() {
+    console.log("access denied")
     setTimeout(function() {
         window.location.href = "index.php";
     }, 3000);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('accessDeniedPage')) {
+        redirectAfterDelay();
+    }
+});
 
 function getSelectedListItem() {
     return document.querySelector('.list-group-item.active');
@@ -61,7 +68,7 @@ function viewLog(type,id) {
 }    
 
 function viewCaseDetails(event) {
-    const listItem = event.target;
+    const listItem = event.currentTarget;
     const id = listItem.getAttribute("data-id");
     const name = listItem.getAttribute("data-name");
     const description = listItem.getAttribute("data-description");

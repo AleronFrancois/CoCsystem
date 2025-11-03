@@ -3,41 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <title>CoC System Documentation</title>
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="scripts/bootstrap.bundle.min.js" defer></script>
+    <script src="scripts/scripts.js" defer></script>
 </head>
 
 <body>
-    <h1>CoC System Documentation</h1>
+    <?php include "components/navbar.php"; ?>
+    
+    <div class="container mt-4">
+        <h1 class="mb-4">Chain of Custody (CoC) System Documentation</h1>
 
-    <!-- Overview -->
-    <p>CocSystem is a mini Chain of Custody (CoC) System designed for securely storing and managing digital evidence during a digital-forensic investigation.
-       This system allows Supervisors to create cases and assign investigators to collaborate within a secure and controlled enviroment. 
-       To ensure the credibility of the investigation, every action is automatically logged.
-    </p>
+        <!-- Overview -->
+        <section>
+            <h2>Overview</h2>
+            <p>
+                The CoC System is a lightweight digital Chain of Custody tool designed to securely store and manage evidence during digital forensic investigations.
+                Supervisors can create cases and assign investigators to collaborate within a controlled and secure environment.
+                Every action taken in the system is automatically logged to ensure transparency, accountability, and the integrity of the investigation process.
+            </p>
+        </section>
 
-    <!-- Supervisor information: -->
-    <h2>Supervisors role</h2>
-    <p>In this CoC system, the supervisor oversees and manages the cases and the investigators assigned to them. Supervisors have the authority to:
-        <ul>
-            <li>Create cases</li>
-            <li>Assign invesigators to cases</li>
-            <li>Monitor progress of ongoing investigations</li>
-            <li>Assign existing evidence to other cases</li>
-            <li>Review case reports</li>
-            <li>Close cases once they are finished</li>
-        </ul>
-        The role of supervisors is to ensure that all actions comply with procedural standards and maintain the integrity of the investigations. 
-        Essentially, Supervisors are both coordinators and overseers in which they hold full permission to manage cases to ensuring the security, 
-        transparency, and credibility of the digital forensic invesigation.
-    </p>
-    <img src="images/supervisor_casesystem_sequencediagram.png" alt="Supervisor CoC System Sequence Diagram">
+        <!-- Supervisor information -->
+        <section>
+            <h2>Supervisor Role</h2>
+            <p>
+                Supervisors oversee and manage investigations, ensuring all procedures follow established standards. Their responsibilities include:
+            </p>
+            <ul>
+                <li>Creating new cases.</li>
+                <li>Assigning investigators to cases.</li>
+                <li>Monitoring the progress of ongoing investigations.</li>
+                <li>Assigning existing evidence to different cases.</li>
+                <li>Reviewing case reports.</li>
+                <li>Closing cases when investigations are complete.</li>
+            </ul>
+            <p>
+                Supervisors act as coordinators and overseers, with full permissions to manage cases and maintain security, transparency, and credibility throughout the investigation process.
+            </p>
+            <img src="images/supervisor_casesystem_sequencediagram.png" alt="Supervisor CoC System Sequence Diagram" class="img-fluid my-3">
+        </section>
 
-    <!-- Investigator information -->
-    <h2>Investigator role</h2>
-    <p>The investigator...
+        <!-- Investigator information -->
+        <section>
+            <h2>Investigator Role</h2>
+            <p>
+                Investigators are responsible for handling and submitting evidence within the cases assigned to them. Their main tasks include:
+            </p>
+            <ul>
+                <li>Viewing cases assigned by supervisors.</li>
+                <li>Uploading evidence files with relevant metadata.</li>
+                <li>Adding comments or notes related to submitted evidence.</li>
+                <li>Following the procedures to ensure evidence integrity.</li>
+            </ul>
+            <p>
+                Investigators work under the guidance of supervisors, ensuring all evidence is managed securely and every action is properly logged.
+            </p>
+            <img src="images/investigator_casesystem_sequencediagram.png" alt="Investigator CoC System Sequence Diagram" class="img-fluid my-3">
+        </section>
 
-    </p>
-    <img src="images/investigator_casesystem_sequencediagram.png" alt="Investigator CoC System Sequence Diagram">
+        <!-- Features -->
+        <section>
+            <h2>Key Features</h2>
+            <ul>
+                <li><strong>User Authentication:</strong> Secure login system with hashed passwords.</li>
+                <li><strong>Role-Based Access Control:</strong> Supervisors and investigators have distinct permissions.</li>
+                <li><strong>Case Management:</strong> Supervisors can create, assign, and manage cases; investigators can view assigned cases.</li>
+                <li><strong>Evidence Management:</strong> Upload artefacts with metadata (creation, modification, access times). Supervisors can approve or reject evidence.</li>
+                <li><strong>Comments:</strong> Investigators can leave comments for supervisors on evidence submissions.</li>
+                <li><strong>Chain of Custody Logs:</strong> Track actions such as uploads, downloads, rehashes, and assignments, with reports available in PDF or HTML format.</li>
+                <li><strong>Blob Storage:</strong> Evidence files are stored securely using BLOB storage.</li>
+                <li><strong>Metadata Extraction:</strong> Automatic extraction of available file metadata.</li>
+                <li><strong>Administrative Features:</strong> Add new investigators, assign investigators to cases, and review pending evidence submissions.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Full Feature and Tool Index</h2>
+            <p>The CoC System provides the following core features and tools:</p>
+            <ul>
+                <li><strong>User Management:</strong> Registration, login, role-based access control (supervisors/investigators).</li>
+                <li><strong>Case Management:</strong> Create, assign, monitor, and close cases.</li>
+                <li><strong>Evidence Management:</strong> Upload/download files, track metadata, approve/reject submissions.</li>
+                <li><strong>Comments:</strong> Leave notes on evidence for communication between investigators and supervisors.</li>
+                <li><strong>Chain of Custody Logs:</strong> Automatically record all actions on evidence (upload, download, assignment, rehash).</li>
+                <li><strong>Report Generation:</strong> Export CoC logs in PDF or HTML formats.</li>
+                <li><strong>Blob Storage:</strong> Secure storage of uploaded evidence.</li>
+                <li><strong>Metadata Extraction:</strong> Automatic reading of file properties (creation, modification, access times).</li>
+                <li><strong>Administrative Tools:</strong> Add new users, manage roles, review pending evidence.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Libraries and Frameworks Used</h2>
+            <ul>
+                <li><strong>PHP:</strong> Server-side scripting for logic and database interactions.</li>
+                <li><strong>MySQL:</strong> Database management for storing users, cases, evidence, and logs.</li>
+                <li><strong>Bootstrap:</strong> Front-end styling and responsive layout.</li>
+                <li><strong>JavaScript:</strong> For front-end interactivity and dynamic page updates.</li>
+                <li><strong>Other Libraries:</strong> Optional PDF generation library (e.g., TCPDF or FPDF), and PHP file handling utilities.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Limitations</h2>
+            <ul>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </section>
+    </div>
 </body>
 </html>

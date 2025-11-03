@@ -89,9 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             `Case`.description,
             `Case`.creator_id
         FROM `Case`
+        INNER JOIN `Case_User` ON `Case`.id = `Case_User`.case_id
+        WHERE `Case_User`.user_id = ?
         ORDER BY `Case`.id DESC
     ');
-    $stmt->execute();
+    $stmt->execute([$_SESSION["id"]]);
     $cases = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -108,7 +110,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="p-3 border foreground shadow rounded-5 d-flex flex-column h-100">
                 <div class="justify-content-between d-flex">
                     <h2>Cases</h2>
-                    <img role="button" src="images/add_icon.svg" data-bs-toggle="modal" data-bs-target="#addCaseModal" hover="pointer">
+                    <?php if($role == 'supervisor'): ?>
+                        <a 
+                            class="outerIcon d-flex align-items-center justify-content-center rounded-circle btn btn-primary"
+                            role="button" data-bs-toggle="modal" data-bs-target="#addCaseModal"
+                            title="Add new evidence"
+                        >
+                            <img src="images/add_icon.svg" class="icon">
+                        </a>
+                    <?php endif; ?>
                 </div>
                 <hr>
                 <!-- List of Cases -->

@@ -8,7 +8,7 @@
     <script src="scripts/bootstrap.bundle.min.js"></script>
     <script src="scripts/scripts.js" defer></script>
 </head>
-<body class="background" onload="redirectAfterDelay()">
+<body class="background" id="accessDeniedPage" onload="redirectAfterDelay()">
     <div class="login-container">
         <h1>Nice Try!</h1>
         <h2>You are not supposed to be seeing this page. You will be redirected shortly...</h2>
