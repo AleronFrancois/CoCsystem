@@ -35,16 +35,17 @@ if ($type === 'evidence') {
 elseif ($type === 'case') {
     $stmt = $conn->prepare("
         SELECT  
-            e2.timestamp, 
-            e2.`action`, 
-            e2.action_hash AS hash, 
-            u.username, 
-            e2.case_id AS id, 
-            c.name AS name
-        FROM casecustodyaction e2 
-        JOIN `user` u ON e2.user_id = u.id 
-        JOIN `case` c ON e2.case_id = c.id   
-        WHERE e2.case_id = ?
+    COALESCE(e2.evidence_id, 'N/A') AS evidence_id,
+    e2.timestamp, 
+    e2.`action`, 
+    u.username, 
+    u.id AS user_id,
+    e2.case_id AS id, 
+    c.name AS name
+    FROM casecustodyaction e2 
+    JOIN `user` u ON e2.user_id = u.id 
+    JOIN `case` c ON e2.case_id = c.id   
+    WHERE e2.case_id = ?
     ");
     $stmt->execute([$id]);
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -58,15 +59,29 @@ if (!empty($data)) {
     echo "<h1>Custody logs for $name</h1>";
     echo "<h2>$type ID: $id</h2>";
     echo "<table border = 1>";
-    echo "<tr><th>Timestamp</th><th>Action</th><th>User</th><th>User ID</th><th>Hash</th></tr>";
-    foreach ($data as $row) {
-        echo "<tr>";
-        echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['action']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['user_id']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['hash']) . "</td>";
-        echo "</tr>";
+    if ($type === 'Evidence') {
+        echo "<tr><th>Timestamp</th><th>Action</th><th>User</th><th>User ID</th><th>Hash</th></tr>";
+        foreach ($data as $row) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['action']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['user_id']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['hash']) . "</td>";
+            echo "</tr>";
+        }
+    }
+    if ($type === 'Case') {
+        echo "<tr><th>Timestamp</th><th>Action</th><th>User</th><th>User ID</th><th>Evidence ID</tr>";
+        foreach ($data as $row) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['timestamp']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['action']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['user_id']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['evidence_id']) . "</td>";
+            echo "</tr>";
+        }
     }
     echo "</table>";
 } else {
